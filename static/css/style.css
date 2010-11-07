@@ -118,7 +118,6 @@ h3 {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   padding: 3px;
-  margin-left: 5px;
 }
 #tagcloud {
   padding: 5px;
@@ -234,11 +233,12 @@ footer ul li {
 .box {
   display: box;
   background: #e2e2e2;
-  color: #FFFFFF;
+  color: #000000;
   border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   padding: 3px;
+  margin-left: 5px;
 }
 #twocol a {
   font-size: 28px;

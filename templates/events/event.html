@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block head %}
-	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<script type="text/javascript" src="/static/jquery/js/jquery.ui.datepicker-de.js"></script>
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 	<script type="text/javascript" src="/static/js/googlemaps.js"></script>
@@ -80,15 +79,10 @@
 					  {{ form.location_city.label_tag }} {{ form.location_city.errors }}
 					  {{ form.location_city }}
 					</div>
-					
-					<input id="id_location_show_in_map" onclick="displayLocation(id_{{ form.location_street.html_name }}.value, id_{{ form.location_city.html_name }}.value)" type="button" value="Adresse in Google Maps anzeigen"><div id="map_error"></div>
-
-					<div id="map_canvas" style="height: 400px; width: 100%"></div>
-
-					
+ 					<a href="#" id="id_location_show_in_map" onclick="displayLocation(id_{{ form.location_street.html_name }}.value, id_{{ form.location_city.html_name }}.value)" type="button" value="Adresse in Google Maps anzeigen">Auf Karte anzeigen</a>
 				</section>
-          
-          <div class="row"><input type="submit" value="{{ button_label }}" /></div> 				
+				<div id="map_canvas"></div>          
+        <div class="row"><input type="submit" value="{{ button_label }}" /></div> 				
 			</form>
 		</section>  
 		</div>

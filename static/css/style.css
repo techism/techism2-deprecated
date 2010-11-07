@@ -349,4 +349,6 @@ textarea:focus {
   font-size: 10px;
   color: #ffffff;
 }
-.detail a { color: #999999; }
+.detail a {
+  color: #999;
+}

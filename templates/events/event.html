@@ -79,7 +79,7 @@
 					  {{ form.location_city.label_tag }} {{ form.location_city.errors }}
 					  {{ form.location_city }}
 					</div>
- 					<a href="#" id="id_location_show_in_map" onclick="displayLocation(id_{{ form.location_street.html_name }}.value, id_{{ form.location_city.html_name }}.value)" type="button" value="Adresse in Google Maps anzeigen">Auf Karte anzeigen</a>
+ 					<p><a href="#" id="id_location_show_in_map" onclick="displayLocation(id_{{ form.location_street.html_name }}.value, id_{{ form.location_city.html_name }}.value)" type="button" value="Adresse in Google Maps anzeigen">Auf Karte anzeigen</a></p>
 				</section>
 				<div id="map_canvas"></div>          
 				<div class="row submit"><input type="submit" value="{{ button_label }}" /></div> 				

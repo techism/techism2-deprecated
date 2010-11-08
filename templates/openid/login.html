@@ -1,57 +1,54 @@
 {% extends "base.html" %}
 {% block content %}
-<section id="content">
-    <section id="login">
-			<div id="message"> 
-        Nach der Anmeldung kannst du folgende Vorteile nutzen:			  
-				<ul>
-					<li>Nachträgliche Editieren und Löschen deiner angelegten Events</li>
-          <li>Entfallen des Reviewprozesse nach mehreren erfolgreichen Event Eintragungen.</li> 
-				</ul>
-       <strong>Datenschutz:</strong> Bei der Anmeldung speichern wir deinen Namen und E-Mail Adresse ab. Diese Daten werden bei jedem Login aktualisiert. Die Übertragung deiner Daten ist nach dem Login SSL ist verschlüsselt. 			
-			</div>
-    </section>
-    
-    <section id="openid">
-      <h3>OpenID Login</h3>
-      
-      <div >
-        <a href="#" onclick="id_openid_identifier.value=''"><img src="/static/openid/openid.png"  />Open ID</a>
-        <a href="#" onclick="id_openid_identifier.value='https://www.google.com/accounts/o8/id'">Google</a>
-        <a href="#" onclick="id_openid_identifier.value='https://me.yahoo.com/'">Yahoo</a>
-      </div>
 
-      {% if form.errors %}
-        <p class="errors">Please correct errors below:<br />
-            {% if form.openid_identifier.errors %}
-            <span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
-            {% endif %}
-            {% if form.next.errors %}
-            <span class="error">{{ form.next.errors|join:", " }}</span>
-            {% endif %}
-        </p>
-      {% endif %}
-      <form name="fopenid" action="{{ action }}" method="post">
-          {% csrf_token %}
+<div id="content">
+	<div class="content">
+		<div id="message">
+			<p>
+				Nach der Anmeldung kannst du folgende Vorteile nutzen:
+				<ul>
+					<li>Nachträgliche Editieren und Löschen deiner angelegten Events.</li>
+					<li>Entfallen des Reviewprozesses nach mehreren erfolgreichen Eintragungen.</li> 
+				</ul>
+				<strong>Datenschutz:</strong> Bei der Anmeldung speichern wir deinen Namen und E-Mail Adresse ab.
+				Diese Daten werden bei jedem Login aktualisiert. Die Übertragung deiner Daten nach dem Login ist verschlüsselt.
+			</p>
+		</div>
+		<h3>OpenID Login</h3>
+		<p>
+			Wähle deinen OpenID Provider 
+			(<a href="#" onclick="$('#id_openid_identifier').val('https://www.google.com/accounts/o8/id')">Google</a>, 
+			<a href="#" onclick="$('#id_openid_identifier').val('https://me.yahoo.com/')">Yahoo</a>) 
+			oder trage deine <a href="#" onclick="$('#id_openid_identifier').val('')">OpenID</a> ein.
+		</p>
+		{% if form.errors %}
+		<p class="errors">Please correct errors below:<br />
+			{% if form.openid_identifier.errors %}
+			<span class="error">{{ form.openid_identifier.errors|join:", " }}</span>
+			{% endif %}
+			{% if form.next.errors %}
+			<span class="error">{{ form.next.errors|join:", " }}</span>
+			{% endif %}
+		</p>
+		{% endif %}
+		<form name="fopenid" action="{{ action }}" method="post">
+			{% csrf_token %}
 			<div class="row">
-                  		<label for="id_openid_identifier">OpenID</label>
-                  		{{ form.openid_identifier }}
+				<label for="id_openid_identifier">OpenID</label>
+				{{ form.openid_identifier }}
 			</div>
 			<div class="row submit">
-				<input name="bsignin" type="submit" value="Sign in">
+				<input name="bsignin" type="submit" value="Login">
 			</div>
-       {% if next %}
-              <input type="hidden" name="next" value="{{ next }}" />
-       {% endif %}
-      </form>
-    </section>
-    
-    <section>
-      <h3>Google Login</h3>
-      <a href="/accounts/google_login">Google Login</a>
-    </section>
- 
-</section>
+			{% if next %}
+				<input type="hidden" name="next" value="{{ next }}" />
+			{% endif %}
+		</form>
+
+		<h3>Google Login</h3>
+		Du kannst auch deinen <a href="/accounts/google_login">Google Account</a> zum Login nutzen.
+	</div>
+</div>
 {% endblock %}
 
 

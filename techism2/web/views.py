@@ -51,7 +51,7 @@ def create(request):
     locations_as_json = __get_locations_as_json()
     
     if request.method == 'POST':
-        return __save_event(request, button_label)
+        return __save_event(request, button_label, locations_as_json)
     
     return render_to_response(
         'events/event.html',
@@ -71,7 +71,7 @@ def edit(request, event_id):
         return HttpResponseForbidden()
     
     if request.method == 'POST':
-        return __save_event(request, button_label, event)
+        return __save_event(request, button_label, locations_as_json, event)
     
     form = __to_event_form(event)
     return render_to_response(
@@ -99,7 +99,7 @@ def logout(request):
     django_logout(request)
     return HttpResponseRedirect('/')
 
-def __save_event(request, button_label, old_event=None):
+def __save_event(request, button_label, locations_as_json, old_event=None):
     form = EventForm(request.POST) 
     if form.is_valid(): 
         event= __create_or_update_event_with_location(form, request.user, old_event)
@@ -113,7 +113,8 @@ def __save_event(request, button_label, old_event=None):
             {
                 'form': form, 
                 'error': form.errors,
-                'button_label': button_label
+                'button_label': button_label,
+                'locations_as_json': locations_as_json
             },
             context_instance=RequestContext(request))
 

@@ -11,7 +11,3 @@ cron:
   url: /cron/update_tags_cache
   schedule: every 30 minutes
 
-- description: update tags cache
-  url: /cron/tweet_upcoming_events
-  schedule: every 30 minutes
-

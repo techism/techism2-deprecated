@@ -22,10 +22,9 @@
 						<li>Veranstalungen mit Teilnahmebeschränkungen und Kosten >150€ werden in der Regel nicht aufgenommen.</li>
 						<li>Neue Events werden erst nach einem Review freigeschaltet. Dies ist leider nötig um "Spam"-Listungen zu vermeiden. Nach 5 erfolgreichen Eintragung entfällt der Review Prozess.</li> 
 					</ul>
-				<p>Eine Anmeldung ist optional und ermöglichst das nachträgliche Editieren und Löschen deiner angelegten Events - <a href="/accounts/login/">Hier anmelden</a></p>
+					<p>Eine Anmeldung ist optional und ermöglichst das nachträgliche Editieren und Löschen deiner angelegten Events - <a href="/accounts/login/">Hier anmelden</a></p>
 				</div>
 			{% endif %}
-      <div>
 			<form action="" method="post">
 				{% csrf_token %}
 				{{ form.id }}
@@ -57,39 +56,39 @@
 					  <div>{{ form.date_time_begin }} (HH:mm) Uhr</div>
 					</div>
 					<div class="row" id="shortform">
-					  {{ form.date_time_end.label_tag }} {{ form.date_time_end.errors }}					  
+					  {{ form.date_time_end.label_tag }} {{ form.date_time_end.errors }}
 					  <div>{{ form.date_time_end }} (HH:mm) Uhr</div>
 				  </div>
 				</div>
 				<div id="where">
 					<div class="row"><h3>Wo</h3></div> 
 					<div class="row">
-            <label>Veranstaltungsort wählen</label>
-            {{ form.location }}
-          </div>
+						<label>Veranstaltungsort wählen</label>
+						{{ form.location }}
+					</div>
 					<div class="row"><p><strong>oder</strong></p></div>
 					<div class="row">Neuen Veranstaltungsort anlegen</div><br>
 					<div class="row">
-					  {{ form.location_name.label_tag }} {{ form.location_name.errors }}					  
-					  {{ form.location_name }}
-					<div class="row">
-					  {{ form.location_street.label_tag }} {{ form.location_street.errors }}					  
-					  {{ form.location_street }}
+						{{ form.location_name.label_tag }} {{ form.location_name.errors }}
+						{{ form.location_name }}
 					</div>
 					<div class="row">
-					  {{ form.location_city.label_tag }} {{ form.location_city.errors }}
-					  {{ form.location_city }}
+						{{ form.location_street.label_tag }} {{ form.location_street.errors }}
+						{{ form.location_street }}
+					</div>
+					<div class="row">
+						{{ form.location_city.label_tag }} {{ form.location_city.errors }}
+						{{ form.location_city }}
 					</div>
  					<p>
- 					  <div class="row submit">
- 					    <input id="id_location_show_in_map" onclick="displayLocation(id_{{ form.location_street.html_name }}.value, id_{{ form.location_city.html_name }}.value)" type="button" value="Adresse in Google Maps anzeigen">
- 					  </div>
+ 						<div class="row submit">
+ 							<input id="id_location_show_in_map" onclick="displayLocation(id_{{ form.location_street.html_name }}.value, id_{{ form.location_city.html_name }}.value)" type="button" value="Adresse in Google Maps anzeigen">
+ 						</div>
  					</p>
 				</div>
-				<div id="map_canvas"></div>          
-				<div class="row submit"><input type="submit" value="{{ button_label }}" /></div> 				
+				<div id="map_canvas"></div>
+				<div class="row submit"><input type="submit" value="{{ button_label }}" /></div> 
 			</form>
-		</div>  
 		</div>
 	</div>
 {% endblock %}

@@ -38,6 +38,11 @@ function initializeMunichCityCenter() {
 function renderEventDetailMap() {
 	var where = $(this).children("section.where");
 	
+	// exit if no where id exists
+	if( where.length == 0) {
+		return;
+	}
+	
 	// the id of that map div
 	var mapId = "map_" + where[0].id;
 	

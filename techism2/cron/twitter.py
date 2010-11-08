@@ -6,7 +6,6 @@ from techism2.models import TweetedEvent
 from datetime import datetime, timedelta
 import tweepy
 import urllib
-import logging
 
 def tweet_upcoming_events(request):
     today = datetime.utcnow() + timedelta(days=0)
@@ -16,7 +15,6 @@ def tweet_upcoming_events(request):
     for event in event_list:
         if __not_tweeted_yet(event):
             tweet = __format_tweet(request, event)
-            logging.info(tweet)
             __tweet_event(tweet)
             __mark_as_tweeted(event)
     response = HttpResponse()

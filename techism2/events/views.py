@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from techism2.models import Event, Location, StaticPage
-from techism2.web.forms import EventForm
+from techism2.events.forms import EventForm
 from techism2 import service
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse

@@ -6,20 +6,20 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # events
-    (r'^$', 'techism2.web.views.index'),
-    (r'^events/$', 'techism2.web.views.index'),
-    url(r'^events/(?P<event_id>\d+)/$', 'techism2.web.views.show', name='event-show'),
-    (r'^events/edit/(?P<event_id>\d+)/$', 'techism2.web.views.edit'),
-    (r'^events/create/$', 'techism2.web.views.create'),
-    (r'^events/archive/$', 'techism2.web.views.archive'),
-    (r'^events/tags/(?P<tag_name>.+)/$', 'techism2.web.views.tag'),
+    (r'^$', 'techism2.events.views.index'),
+    (r'^events/$', 'techism2.events.views.index'),
+    url(r'^events/(?P<event_id>\d+)/$', 'techism2.events.views.show', name='event-show'),
+    (r'^events/edit/(?P<event_id>\d+)/$', 'techism2.events.views.edit'),
+    (r'^events/create/$', 'techism2.events.views.create'),
+    (r'^events/archive/$', 'techism2.events.views.archive'),
+    (r'^events/tags/(?P<tag_name>.+)/$', 'techism2.events.views.tag'),
     
     # organizations
     (r'^organizations/$', 'techism2.organizations.views.index'),
     
     # static pages
-    (r'^impressum/$', 'techism2.web.views.static_impressum'),
-    (r'^about/$', 'techism2.web.views.static_about'),
+    (r'^impressum/$', 'techism2.events.views.static_impressum'),
+    (r'^about/$', 'techism2.events.views.static_about'),
     
     # iCal
     (r'^feed.ics$', 'techism2.ical.views.ical'),
@@ -35,7 +35,7 @@ urlpatterns = patterns('',
     
     # login/logout
     (r'^accounts/', include('django_openid_auth.urls')),
-    (r'^accounts/logout/$', 'techism2.web.views.logout'),
+    (r'^accounts/logout/$', 'techism2.events.views.logout'),
     url(r'^accounts/google_login/$', 'gaeauth.views.login', name='google_login'),
     url(r'^accounts/google_logout/$', 'gaeauth.views.logout', name='google_logout'),
     url(r'^accounts/google_authenticate/$', 'gaeauth.views.authenticate', name='google_authenticate'),

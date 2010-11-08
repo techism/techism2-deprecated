@@ -5,7 +5,9 @@ from techism2 import service
 from techism2.models import TweetedEvent
 from datetime import datetime, timedelta
 import tweepy
+from tweepy.error import TweepError
 import urllib
+import logging
 
 def tweet_upcoming_events(request):
     today = datetime.utcnow() + timedelta(days=0)
@@ -15,8 +17,17 @@ def tweet_upcoming_events(request):
     for event in event_list:
         if __not_tweeted_yet(event):
             tweet = __format_tweet(request, event)
-            __tweet_event(tweet)
-            __mark_as_tweeted(event)
+            try:
+                __tweet_event(tweet)
+                __mark_as_tweeted(event)
+                break
+            except TweepError, e:
+                logging.error(e.reason)
+                if e.reason == u'Status is a duplicate.':
+                    __mark_as_tweeted(event)
+                    break
+                else:
+                    raise e
     response = HttpResponse()
     return response
 
@@ -43,7 +54,9 @@ def __format_tweet(request, event):
 def __shorten_url(url):
     params = urllib.urlencode({'security_token': None, 'url': url})
     f = urllib.urlopen('http://goo.gl/api/shorten', params)
-    return json.loads(f.read())['short_url']
+    short_url = json.loads(f.read())['short_url']
+    f.close()
+    return short_url
 
 def __tweet_event(tweet):
     CONSUMER_KEY = service.get_setting('twitter_consumer_key')

@@ -6,7 +6,6 @@ function displayLocation(street, city){
   var height = Math.round(width / 3);
   if (mapHtml.substring(0, 4) == "<div"){
     if (street.length > 0 && city.length > 0){
-        geocoder = new google.maps.Geocoder();
         geocodeAndSetMarker (map, location, true);
       }
     } else {
@@ -69,7 +68,6 @@ function renderEventDetailMap() {
 		where.append('<div id="'+mapId+'" style="height: '+height+'px; width: 100%" />');
 		var myOptions = getOptionsMunichCityCenter ();
 		map = new google.maps.Map(document.getElementById(mapId), myOptions);
-		var geocoder = new google.maps.Geocoder();
 		geocodeAndSetMarker (map, decodeURIComponent(query), false)
 	}
 }
@@ -100,6 +98,7 @@ function getOptionsMunichCityCenter (){
 }
 
 function geocodeAndSetMarker (myMap, location, isDraggable){
+      geocoder = new google.maps.Geocoder();
       geocoder.geocode( { 'address': location}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
           myMap.setCenter(results[0].geometry.location);

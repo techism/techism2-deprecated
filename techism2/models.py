@@ -99,4 +99,9 @@ class Setting(models.Model):
     date_time_created = models.DateTimeField(auto_now_add=True)
     date_time_modified = models.DateTimeField(auto_now=True)
 
+class TweetedEvent(models.Model):
+    event = models.ForeignKey(Event)
+    date_time_created = models.DateTimeField(auto_now_add=True)
+    date_time_modified = models.DateTimeField(auto_now=True)
+
 

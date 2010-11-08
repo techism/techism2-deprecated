@@ -5,7 +5,7 @@ from techism2.rss.feeds import UpcommingEventsRssFeed, UpcommingEventsAtomFeed
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # web
+    # events
     (r'^$', 'techism2.web.views.index'),
     (r'^events/$', 'techism2.web.views.index'),
     url(r'^events/(?P<event_id>\d+)/$', 'techism2.web.views.show', name='event-show'),
@@ -13,6 +13,9 @@ urlpatterns = patterns('',
     (r'^events/create/$', 'techism2.web.views.create'),
     (r'^events/archive/$', 'techism2.web.views.archive'),
     (r'^events/tags/(?P<tag_name>.+)/$', 'techism2.web.views.tag'),
+    
+    # organizations
+    (r'^organizations/$', 'techism2.organizations.views.index'),
     
     # static pages
     (r'^impressum/$', 'techism2.web.views.static_impressum'),

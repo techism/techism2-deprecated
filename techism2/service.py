@@ -66,3 +66,8 @@ def get_secure_url():
     secure_url = secure_url_setting.value
     return secure_url
 
+def get_setting(name):
+    setting, _ = Setting.objects.get_or_create(name=name, defaults={'value': u'none'})
+    value = setting.value
+    return value
+

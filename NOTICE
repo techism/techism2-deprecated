@@ -46,3 +46,7 @@ This product includes the following third-party components:
    http://pypi.python.org/pypi/python-openid
    http://github.com/openid/python-openid
 
+ * zip-packages/tweepy.zip
+   MIT License (zip-packages/tweepy-LICENSE)
+   https://github.com/joshthecoder/tweepy
+

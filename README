@@ -93,6 +93,15 @@ $ zip -r openid.zip openid
 $ cp openid.zip <path-to-techism2>/zip-packages/openid.zip
 ```
 
+### tweepy (59f6634aa0cd365af0c0f2d94dd7e95627ac229a)
+Nice tutorial: http://jeffmiller.github.com/2010/05/31/twitter-from-the-command-line-in-python-using-oauth
+```sh
+$ git clone git://github.com/joshthecoder/tweepy.git
+$ cd tweepy
+$ zip -r tweepy.zip tweepy
+$ cp tweepy.zip <path-to-techism2>/zip-packages/tweepy.zip
+```
+
 
 ## Deployment to App Engine:
 ```sh

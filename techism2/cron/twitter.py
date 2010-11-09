@@ -40,8 +40,9 @@ def __format_tweet(request, event):
     else:
         date_string = event.get_date_time_begin_cet().strftime("%d.%m.%Y %H:%M")
     
+    base_url = service.get_default_url()
     relative_url = reverse('event-show', args=[event.id])
-    long_url = request.build_absolute_uri(relative_url)
+    long_url = base_url + relative_url
     short_url = __shorten_url(long_url)
     
     max_length = 140 - len(date_string) - len(short_url) - 5
@@ -52,11 +53,19 @@ def __format_tweet(request, event):
     return tweet
 
 def __shorten_url(url):
-    params = urllib.urlencode({'security_token': None, 'url': url})
-    f = urllib.urlopen('http://goo.gl/api/shorten', params)
-    short_url = json.loads(f.read())['short_url']
-    f.close()
-    return short_url
+    for attempt in range(1, 10):
+        f = None
+        try:
+            params = urllib.urlencode({'security_token': None, 'url': url})
+            f = urllib.urlopen('http://goo.gl/api/shorten', params)
+            short_url = json.loads(f.read())['short_url']
+            return short_url
+        except ValueError, error:
+            pass
+        finally:
+            if f is not None:
+                f.close()
+    raise error
 
 def __tweet_event(tweet):
     CONSUMER_KEY = service.get_setting('twitter_consumer_key')

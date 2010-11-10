@@ -137,6 +137,9 @@ h2 {
     text-decoration:none;
     color:#000000;    
   } 
+	.next {
+			color: #999;
+	}
 }
 
 h3 {
@@ -353,7 +356,7 @@ footer{
     margin-left:0px; 
   }
   p {
-    margin-top:0px;
+//    margin-top:0px;
     margin-bottom:0px;
   } 
   a {
@@ -430,7 +433,10 @@ input:focus, textarea:focus {
 }
       
 .submit input {   
-  width: auto;
+  width: auto;   
+  border-radius: @general-border-radius;   
+  background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#D8D8D8));
+//	color:#FFFFF;
 }
 
 #version span, #version a {
@@ -438,6 +444,8 @@ input:focus, textarea:focus {
   color: #3B3B3B;
 }
 
-.detail a {
+a {
 	color: #999;
 }
+
+

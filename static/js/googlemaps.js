@@ -1,13 +1,13 @@
 function displayLocation(street, city){
   var where = $("#map_location");
   var location = street +","+city+","+ "Bayern";
-  var width = where.parent().width(); // img of #map_location may not yet be loaded, use parent
-  var height = Math.round(width / 3);
   if (where[0].nodeName == "DIV"){
     if (street.length > 0 && city.length > 0){
         geocodeAndSetMarker (map, location, true);
     }
   } else {
+    var width = where.parent().width(); // img of #map_location may not yet be loaded, use parent
+    var height = getStaticMapHeight(width);
     var newMap = '<img id="map_location" src="http://maps.google.com/maps/api/staticmap?center=' + location + '&size='+width+'x'+height+'&zoom=15&sensor=false&markers=color:red|' + location + '" />';
     where.replaceWith(newMap);
   }
@@ -19,15 +19,16 @@ function initializeMunichCityCenter() {
   //map = new google.maps.Map($("map_canvas"), myOptions);  
   var where = $("#map_canvas");
   var width = where.width();
-  var height = Math.round(width / 3);
   var mapId = "map_location";
   if(width < 640) {
     // static map with link for small screens, max. size of static map is 640x640
+    var height = getStaticMapHeight(width);
     var query ="48.13788,11.575953";
     where.append('<img id="'+mapId+'" src="http://maps.google.com/maps/api/staticmap?center='+query+'&size='+width+'x'+height+'&zoom=15&sensor=false" />');
   }
   else {
     // dynamic map for larger screens
+    var height = getDynamicMapHeight(width);
     where.append('<div id="'+mapId+'" style="height: '+height+'px; width: 100%" />');
     var myOptions = getOptionsMunichCityCenter ();
     map = new google.maps.Map(document.getElementById(mapId), myOptions);
@@ -62,13 +63,15 @@ function renderEventDetailMap() {
 	var query = $.parseQuery(mapLink[0].search, {'f':function(v){return v;}}).q
 	
 	var width = where.width();
-	var height = Math.round(width / 3);
+	var height = Math.round(width / 2);
 	if(width < 640) {
 		// static map with link for small screens, max. size of static map is 640x640
+		var height = getStaticMapHeight(width);
 		where.append('<a id="'+mapId+'" href="http://maps.google.de/maps?q='+query+'&z=17"><img src="http://maps.google.com/maps/api/staticmap?center='+query+'&size='+width+'x'+height+'&zoom=15&sensor=false&markers=color:red|'+query+'" /></a>');
 	}
 	else {
 		// dynamic map for larger screens
+		var height = getDynamicMapHeight(width);
 		where.append('<div id="'+mapId+'" style="height: '+height+'px; width: 100%" />');
 		var myOptions = getOptionsMunichCityCenter ();
 		map = new google.maps.Map(document.getElementById(mapId), myOptions);
@@ -114,3 +117,12 @@ function geocodeAndSetMarker (myMap, location, isDraggable){
         } 
       });
 }
+
+function getDynamicMapHeight(width){
+  return Math.round(width / 3)
+}
+
+function getStaticMapHeight(width){
+  return Math.round(width / 2)
+}
+

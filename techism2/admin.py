@@ -5,7 +5,7 @@ from django.contrib import admin
 
 class EventAdmin(admin.ModelAdmin):
     search_fields = ['title']
-    list_filter = ['published', 'archived', 'location']
+    list_filter = ['published', 'archived']
     list_display = ['title', 'date_time_begin', 'date_time_end', 'location', 'tags', 'user', 'archived', 'published']
     #list_editable = ['published']
 

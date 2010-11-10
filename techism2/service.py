@@ -46,25 +46,22 @@ def __fetch_tags():
     return tags
 
 def send_event_review_mail(event):
-    from_setting, _ = Setting.objects.get_or_create(name='event_review_mail_from', defaults={'value': u'x'})
-    to_setting, _ = Setting.objects.get_or_create(name='event_review_mail_to', defaults={'value': u'x'})
     subject = u'[Techism] Neues Event - bitte prüfen'
     message_details = u'Titel: %s\n\nBeschreibung: %s\n\n' % (event.title, event.description);
     message_urls = u'Login-Url: %s\n\nEvent-Url: %s\n\n' % (get_secure_url()+"/accounts/login/", get_secure_url()+"/admin/techism2/event/");
     message = message_details + message_urls
-    fr = from_setting.value
-    to = to_setting.value.split(',')
+    fr = get_setting('event_review_mail_from')
+    to = get_setting('event_review_mail_to').split(',')
     send_mail(subject, message, fr, to, fail_silently=False)
 
 def get_secret_key():
-    secret_key_setting, _ = Setting.objects.get_or_create(name='SECRET_KEY', defaults={'value': u'none'})
-    secret_key = secret_key_setting.value
-    return secret_key
+    return get_setting('SECRET_KEY')
 
 def get_secure_url():
-    secure_url_setting, _ = Setting.objects.get_or_create(name='secure_url', defaults={'value': u'none'})
-    secure_url = secure_url_setting.value
-    return secure_url
+    return get_setting('secure_url')
+
+def get_default_url():
+    return get_setting('default_url')
 
 def get_setting(name):
     setting, _ = Setting.objects.get_or_create(name=name, defaults={'value': u'none'})

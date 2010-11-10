@@ -1,17 +1,16 @@
 function displayLocation(street, city){
   var where = $("#map_location");
-  var mapHtml = where.html();
   var location = street +","+city+","+ "Bayern";
-  var width = where.width();
+  var width = where.parent().width(); // img of #map_location may not yet be loaded, use parent
   var height = Math.round(width / 3);
-  if (mapHtml.substring(0, 4) == "<div"){
+  if (where[0].nodeName == "DIV"){
     if (street.length > 0 && city.length > 0){
         geocodeAndSetMarker (map, location, true);
-      }
-    } else {
-        var newMap = '<img id="map_location" src="http://maps.google.com/maps/api/staticmap?center=' + location + '&size='+width+'x'+height+'&zoom=15&sensor=false&markers=color:red|' + location + '" />';
-        where.replaceWith(newMap);
     }
+  } else {
+    var newMap = '<img id="map_location" src="http://maps.google.com/maps/api/staticmap?center=' + location + '&size='+width+'x'+height+'&zoom=15&sensor=false&markers=color:red|' + location + '" />';
+    where.replaceWith(newMap);
+  }
 }
 
 

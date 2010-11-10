@@ -1,3 +1,17 @@
 {% extends "base.html" %}
 
-Organisationen
+{% block content %}
+<section id="content">
+    {% if organization_list %}
+        {% for organization in organization_list %} 
+            <p>
+            {{ organization.title }} <br/>
+            <a href="{{ organization.url }}">{{ organization.url }}</a>
+            </p>
+        {% endfor %}   
+    {% else %}
+        <p>Keine Organisationen hinterlegt.</p>
+    {% endif %}  
+</section>
+
+{% endblock %}

@@ -5,4 +5,5 @@ django
 .pydevproject
 .settings/
 .idea/
-
+static/.DS_Store
+static/images/.DS_Store

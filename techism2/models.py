@@ -20,9 +20,10 @@ class Organization (models.Model):
     title = models.CharField(max_length=200)
     url = models.URLField()
     description = models.TextField(blank=True, null=True)
+    tags = fields.CommaSeparatedListField(models.CharField(max_length=20), blank=True, null=True)
     
     def __unicode__(self):
-        return self.name;
+        return self.title;
     
 
 class Event(models.Model):

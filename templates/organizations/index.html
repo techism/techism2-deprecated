@@ -2,16 +2,21 @@
 
 {% block content %}
 <section id="content">
+  <section class="content">
     {% if organization_list %}
         {% for organization in organization_list %} 
             <p>
-            {{ organization.title }} <br/>
-            <a href="{{ organization.url }}">{{ organization.url }}</a>
+              {{ organization.title }} <br/>
+              <a href="{{ organization.url }}">{{ organization.url }}</a><br/>
+              {% for tag in organization.tags %}
+                    <a href="">{{ tag }}</a>
+              {% endfor %}
             </p>
         {% endfor %}   
     {% else %}
         <p>Keine Organisationen hinterlegt.</p>
-    {% endif %}  
+    {% endif %} 
+  </section> 
 </section>
 
 {% endblock %}

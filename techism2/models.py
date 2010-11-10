@@ -23,7 +23,7 @@ class Organization (models.Model):
     tags = fields.CommaSeparatedListField(models.CharField(max_length=20), blank=True, null=True)
     
     def __unicode__(self):
-        return self.name;
+        return self.title;
     
 
 class Event(models.Model):

@@ -7,9 +7,9 @@
 @link-highlight:#00ff00;
 @link-color:#000000;
 @nav-size:28px;   
-@h2-font-size:28px;  
-@h1-font-size:28px; 
-@h3-font-size:20px; 
+@h2-font-size:24px;
+@h1-font-size:24px;
+@h3-font-size:20px;
 @validate-error:#424242;
 @content-margin:10px;
 @content-background:#FFFFFF; 
@@ -324,11 +324,17 @@ footer{
 }
 
 #create {
-  padding: 5px @content-margin;
   ul {
     list-style-type: none;
   }
 }     
+
+.content {
+  padding: 5px @content-margin;
+  h3 {
+    margin-top:55px;
+  }
+}
 
 #message{
   margin-top:5px;
@@ -375,11 +381,6 @@ label {
   display: inline;
   padding: 5px;  
 }     
-   
-/* FORMS */
-#create h3 {
-	margin-top:55px;
-}
 
 .row{
 	margin:0 auto;

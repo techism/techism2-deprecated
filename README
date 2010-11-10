@@ -32,6 +32,19 @@ The following URLs are available:
 * Dummy Login: [[http://localhost:8000/_ah/login]]
 
 
+## Settings
+The following settings are required and must be added to the in the techism_settings table
+* SECRET_KEY - the Django secret key, used to override the one defined in settings.py
+* default_url - the http URL (http://www.techism.de), used to create URLs in twitter feed
+* secure_url - the https URL (https://techism2.appspot.com), used for redirect to SSL when entering the login page
+* event_review_mail_from - sender mail address used for the event review mail, must be a gmail address
+* event_review_mail_to - comma-separated list of receivers of the event review mail
+* twitter_access_key - Twitter OAuth token
+* twitter_access_secret - Twitter OAuth token
+* twitter_consumer_key - Twitter OAuth token
+* twitter_consumer_secret - Twitter OAuth token
+
+
 ## Update Third-Party Libraries:
 
 
@@ -91,6 +104,15 @@ $ tar -xvzf python-openid-X.Y.Z.tar.gz
 $ cd python-openid-X.Y.Z
 $ zip -r openid.zip openid
 $ cp openid.zip <path-to-techism2>/zip-packages/openid.zip
+```
+
+### tweepy (59f6634aa0cd365af0c0f2d94dd7e95627ac229a)
+Nice tutorial: http://jeffmiller.github.com/2010/05/31/twitter-from-the-command-line-in-python-using-oauth
+```sh
+$ git clone git://github.com/joshthecoder/tweepy.git
+$ cd tweepy
+$ zip -r tweepy.zip tweepy
+$ cp tweepy.zip <path-to-techism2>/zip-packages/tweepy.zip
 ```
 
 

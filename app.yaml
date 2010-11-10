@@ -6,7 +6,8 @@ handlers:
 - {login: admin, script: djangoappengine/deferred/handler.py, url: /_ah/queue/deferred}
 - {static_dir: static/admin/, url: /media/admin}
 - {static_files: static/favicon.ico, upload: static/favicon.ico, url: /favicon.ico}
+- {static_files: static/robots.txt, upload: static/robots.txt, url: /robots.txt}
 - {static_dir: static/, url: /static}
 - {script: djangoappengine/main/main.py, url: /.*}
 runtime: python
-version: 6-devel
+version: 10-devel

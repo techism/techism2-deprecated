@@ -14,6 +14,17 @@ class Location(models.Model):
     
     def __unicode__(self):
         return self.name;
+    
+    
+class Organization (models.Model):
+    title = models.CharField(max_length=200)
+    url = models.URLField()
+    description = models.TextField(blank=True, null=True)
+    tags = fields.CommaSeparatedListField(models.CharField(max_length=20), blank=True, null=True)
+    
+    def __unicode__(self):
+        return self.title;
+    
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
@@ -28,6 +39,7 @@ class Event(models.Model):
     published = models.BooleanField()
     date_time_created = models.DateTimeField(auto_now_add=True)
     date_time_modified = models.DateTimeField(auto_now=True)
+    organization = models.ForeignKey(Organization, blank=True, null=True)
     
     def __unicode__(self):
         return self.title
@@ -98,5 +110,12 @@ class Setting(models.Model):
     value = models.CharField(max_length=500)
     date_time_created = models.DateTimeField(auto_now_add=True)
     date_time_modified = models.DateTimeField(auto_now=True)
+
+class TweetedEvent(models.Model):
+    event = models.ForeignKey(Event)
+    date_time_created = models.DateTimeField(auto_now_add=True)
+    date_time_modified = models.DateTimeField(auto_now=True)
+    
+
 
 

@@ -45,7 +45,11 @@
 			<p class="date">
 				{{ event.get_date_time_begin_cet|display_date }}
 				{% if event.get_date_time_end_cet %} bis
-					{{ event.get_date_time_end_cet|display_date }}
+				  {% if event.getNumberOfDays > 1 %}
+					   {{ event.get_date_time_end_cet|display_date }}
+					{% else %}
+					   {{ event.get_date_time_end_cet|time:"H:i" }}
+					{% endif %}
 				{% endif %}
 			</p>
 		</section>

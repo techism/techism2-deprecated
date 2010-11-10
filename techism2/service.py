@@ -4,7 +4,7 @@ from techism2.models import Event, Setting
 from django.core.cache import cache
 from django.core.mail import send_mail
 
-tags_cache_key = "tags"
+tags_cache_key = "event_tags"
 
 
 def get_event_query_set():

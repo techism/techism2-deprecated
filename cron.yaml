@@ -7,9 +7,13 @@ cron:
   url: /cron/update_archived_flag
   schedule: every 30 minutes
 
-- description: update tags cache
-  url: /cron/update_tags_cache
+- description: update event tags cache
+  url: /cron/update_event_tags_cache
   schedule: every 30 minutes
+  
+- description: update organizations tags cache
+  url: /cron/update_organization_tags_cache
+  schedule: every 12 hours
 
 - description: update tags cache
   url: /cron/tweet_upcoming_events

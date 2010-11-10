@@ -1,10 +1,16 @@
 from django.http import HttpResponse
 from techism2 import service
+from techism2.organizations import org_service
 from datetime import datetime
 
 
-def update_tags_cache(request):
+def update_event_tags_cache(request):
     service.update_tags_cache()
+    response = HttpResponse()
+    return response
+
+def update_organization_tags_cache(request):
+    org_service.update_tags_cache()
     response = HttpResponse()
     return response
 

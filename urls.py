@@ -42,7 +42,8 @@ urlpatterns = patterns('',
     
     # cron jobs
     (r'^cron/update_archived_flag', 'techism2.cron.views.update_archived_flag'),
-    (r'^cron/update_tags_cache', 'techism2.cron.views.update_tags_cache'),
+    (r'^cron/update_organization_tags_cache', 'techism2.cron.views.update_organization_tags_cache'),
+    (r'^cron/update_event_tags_cache', 'techism2.cron.views.update_event_tags_cache'),
     (r'^cron/tweet_upcoming_events', 'techism2.cron.twitter.tweet_upcoming_events'),
     
 

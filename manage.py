@@ -111,7 +111,7 @@ import settings # Assumed to be in the same directory.
 
 
 if __name__ == "__main__":
-    if "proddeploy" in sys.argv:
+    if len(sys.argv) == 2 and sys.argv[1] == "proddeploy":
         _pull()
         _check_git_status()
         version = _update_app_yaml_for_prod_deploy()
@@ -119,12 +119,12 @@ if __name__ == "__main__":
         _commit_prod_deploy(version)
         tag = _tag_prod_deploy(version)
     
-    #execute_manager(settings)
+    execute_manager(settings)
     
-    if "proddeploy" in sys.argv:
+    if len(sys.argv) == 2 and sys.argv[1] == "proddeploy":
         next_dev_version = _update_app_yaml_for_dev()
         _update_version_html(next_dev_version)
         _commit_dev(next_dev_version)
-        #_push(tag)
+        _push(tag)
         sys.stdout.write("Prod deployment successful, check http://%s.latest.techism2.appspot.com and update default version in App Engine console.\n" % version)
 

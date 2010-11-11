@@ -111,7 +111,13 @@ import settings # Assumed to be in the same directory.
 
 
 if __name__ == "__main__":
+    proddeploy = False
+    argv = sys.argv
     if len(sys.argv) == 2 and sys.argv[1] == "proddeploy":
+        proddeploy = True
+        argv = [sys.argv[0], "deploy"]
+    
+    if proddeploy:
         _pull()
         _check_git_status()
         version = _update_app_yaml_for_prod_deploy()
@@ -119,9 +125,9 @@ if __name__ == "__main__":
         _commit_prod_deploy(version)
         tag = _tag_prod_deploy(version)
     
-    execute_manager(settings)
+    execute_manager(settings, argv)
     
-    if len(sys.argv) == 2 and sys.argv[1] == "proddeploy":
+    if proddeploy:
         next_dev_version = _update_app_yaml_for_dev()
         _update_version_html(next_dev_version)
         _commit_dev(next_dev_version)

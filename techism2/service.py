@@ -29,12 +29,12 @@ def get_tags():
         return tags
 
 def update_tags_cache():
-    tags = __fetch_tags()
+    dict_list = get_event_query_set().values('tags')
+    tags = fetch_tags(dict_list)
     cache.set(tags_cache_key, tags, 1800) # expire after 30 min
     return tags
 
-def __fetch_tags():
-    dict_list = get_event_query_set().values('tags')
+def fetch_tags(dict_list):
     tags = dict()    
     for dictionary in dict_list:
         for tag_list in dictionary.itervalues():

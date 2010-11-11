@@ -19,4 +19,10 @@
   </section> 
 </section>
 
+<section id="tagcloud">
+  {% for tag,count in tags.items %}
+    <a id="{{ count }}" {% ifequal tag_name tag %}class="selected"{% endifequal %} href="/events/tags/{{ tag }}/">{{ tag }}</a>
+  {% endfor %}
+</section>
+
 {% endblock %}

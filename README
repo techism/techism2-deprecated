@@ -33,7 +33,7 @@ The following URLs are available:
 
 
 ## Settings
-The following settings are required and must be added to the in the techism_settings table
+The following settings are required and must be added to the techism_settings table
 * SECRET_KEY - the Django secret key, used to override the one defined in settings.py
 * default_url - the http URL (http://www.techism.de), used to create URLs in twitter feed
 * secure_url - the https URL (https://techism2.appspot.com), used for redirect to SSL when entering the login page
@@ -51,9 +51,16 @@ The following settings are required and must be added to the in the techism_sett
 ### django-nonrel (9085:d578c187d733)
 ```sh
 $ hg clone http://bitbucket.org/wkornewald/django-nonrel
-$ cd django-nonrel
-$ zip -r django.zip django
-$ cp django.zip <path-to-techism2>/zip-packages/django.zip
+$ cp -a django-nonrel/django <path-to-techism2>
+```
+Carefully delete unused modules:
+```sh
+rm -rf test
+rm -rf utils/unittest/
+find . -type d -name "tests" | xargs rm -rf
+cd contrib && rm -rf webdesign localflavour comments databrowse flatpages formtools gis humanize markup redirects sitemaps && cd ..
+cd db/backends && rm -rf mysql oracle postgresql sqlite3 && cd ..
+cd conf/locale && ls | grep -v "de$" | grep -v "en$" | grep -v "__init__.py" | xargs rm -rf && cd ..
 ```
 
 ### djangoappengine (117:cf992e9c916f)
@@ -65,21 +72,25 @@ $ rm -rf <path-to-techism2>/.hg*
 
 ### djangotoolbox (154:3ea35d37a2b7)
 ```sh
-$ rm -rf <path-to-techism2>/djangotoolbox
+$ hg clone http://bitbucket.org/wkornewald/djangotoolbox
 $ cp -a djangotoolbox/djangotoolbox <path-to-techism2>
 ```
 
 ### gaeauth (0:38772f617369)
 ```sh
-$ rm -rf <path-to-techism2>/gaeauth
-$ cp -a django-gaeauth/gaeauth <path-to-techism2>
+$ hg clone http://bitbucket.org/fhahn/django-gaeauth
+$ cd django-gaeauth
+$ zip -r gaeauth.zip gaeauth
+$ cp gaeauth.zip <path-to-techism2>/zip-packages/gaeauth.zip
 ```
 
 ### django_openid_auth (version 0.3)
 Download django-openid-auth-X.Y.tar.gz from https://launchpad.net/django-openid-auth
 ```sh
 $ tar -xvzf django-openid-auth-X.Y.tar.gz
-$ cp -a django-openid-auth-X.Y/django_openid_auth <path-to-techism2>
+$ cd django-openid-auth-X.Y
+$ zip -r django-openid-auth.zip django-openid-auth
+$ cp django-openid-auth.zip <path-to-techism2>/zip-packages/django-openid-auth.zip
 ```
 
 ### geapytz (version 2010l)

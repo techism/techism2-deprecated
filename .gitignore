@@ -1,8 +1,8 @@
-django
 /sqlite3.db
 *.pyc
 .project
 .pydevproject
 .settings/
 .idea/
-
+static/.DS_Store
+static/images/.DS_Store

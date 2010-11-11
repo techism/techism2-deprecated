@@ -16,13 +16,14 @@
 		<div id="create" class="content">
 			{% if not user.is_authenticated %}
 				<div id="message">
+					<h1>Event hinzufügen</h1>
 					<p>Bitte beachten!</p>
 					<ul>
 						<li>Unser Fokus sind <strong>Treffen</strong>, <strong>Vorträge</strong> und <strong>Konferenzen</strong> aus dem <strong>Open Source</strong>, <strong>Usergroup</strong> und <strong>DIY</strong> Umfeld</li>
 						<li>Veranstalungen mit Teilnahmebeschränkungen und Kosten >150€ werden in der Regel nicht aufgenommen.</li>
 						<li>Neue Events werden erst nach einem Review freigeschaltet. Dies ist leider nötig um "Spam"-Listungen zu vermeiden. Nach einigen erfolgreichen Eintragungen entfällt der Review Prozess.</li> 
 					</ul>
-					<p>Eine Anmeldung ist optional und ermöglichst das nachträgliche Editieren und Löschen deiner angelegten Events - <a href="/accounts/login/">Hier anmelden</a></p>
+					<p>Eine Anmeldung ist optional und ermöglichst das nachträgliche Editieren und Löschen deiner angelegten Events &raquo; <a href="/accounts/login/">Hier anmelden</a></p>
 				</div>
 			{% endif %}
 			<form action="" method="post">
@@ -87,7 +88,7 @@
  					</p>
 				</div>
 				<div id="map_canvas"></div>
-				<div class="row submit"><input type="submit" value="{{ button_label }}" /></div> 
+				<div class="row submit"><p><input type="submit" value="{{ button_label }}" /></p></div> 
 			</form>
 		</div>
 	</div>

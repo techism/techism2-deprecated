@@ -54,7 +54,7 @@ def create(request):
         return __save_event(request, button_label, locations_as_json)
     
     return render_to_response(
-        'events/event.html',
+        'events/create.html',
         {
             'form': EventForm(),
             'button_label': button_label,
@@ -75,7 +75,7 @@ def edit(request, event_id):
     
     form = __to_event_form(event)
     return render_to_response(
-        'events/event.html',
+        'events/create.html',
         {
             'form': form,
             'button_label': button_label,
@@ -109,7 +109,7 @@ def __save_event(request, button_label, locations_as_json, old_event=None):
         return HttpResponseRedirect(url)
     else:
         return render_to_response(
-            'events/event.html',
+            'events/create.html',
             {
                 'form': form, 
                 'error': form.errors,

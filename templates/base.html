@@ -36,7 +36,7 @@
 					<li><a href="/"><img src="/static/images/techism_logo_05.png" alt="Techism"></a></li>
 					<li{% if '/events/' in request.path or '/' == request.path %} id="active"{% endif %}><a href="/events/">Events</a></li>	
 					<li id="add"><a href="/events/create">+</a></li>
-					<li{% if '/organizations/' in request.path %} id="active"{% endif %}><a href="/organizations/">Organisations</a></li>	
+					<li{% if '/organizations/' in request.path %} id="active"{% endif %}><a href="/organizations/">Orgs</a></li>	
 				</ul>
 				</div>
 		</nav> 
@@ -49,7 +49,6 @@
 				<ul>
 					<li><a href="/impressum/">Impressum</a></li>
 					<li><a href="/about/">Über uns</a></li>
-					<li><a href="http://techism.mixxt.de/networks/wiki/index.gruppen">Wiki</a></li>					
 					{% if user.is_authenticated %}
 						{% if user.is_superuser %}
 							<li><a href="/admin/">Admin</a></li> 

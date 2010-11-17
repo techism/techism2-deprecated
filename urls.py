@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     
     # organizations
     (r'^organizations/$', 'techism2.organizations.views.index'),
+    (r'^organizations/tags/(?P<tag_name>.+)/$', 'techism2.organizations.views.tag'),
     
     # static pages
     (r'^impressum/$', 'techism2.events.views.static_impressum'),

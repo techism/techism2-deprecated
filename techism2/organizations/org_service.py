@@ -6,6 +6,16 @@ from techism2 import service
 
 tags_cache_key = "organization_tags"
 
+def get_tags():
+    # Note: no synchronization, propably not possible on GAE
+    tags = cache.get(tags_cache_key)
+    
+    if tags:
+        return tags
+    else:
+        tags = update_tags_cache()
+        return tags
+
 def update_tags_cache():
     dict_list = __get_base_organization_query_set().values('tags')
     tags = service.fetch_tags(dict_list)

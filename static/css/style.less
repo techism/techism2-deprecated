@@ -14,7 +14,7 @@
 @content-margin:15px;
 @content-background:#FFFFFF; 
 @content-font-color:#000000;
-@content-font-color-invertet:#FFFFFF;
+@content-font-color-inverted:#FFFFFF;
 @form-maxwidth:500px;
 
 /* Tell the browser to render HTML 5 elements as block */
@@ -55,7 +55,7 @@ body {
   text-decoration: none;
 } 
 
-nav ul {
+nav div ul {
   padding: 0px; 
   margin:0px;
   margin-left:10px;       
@@ -64,12 +64,17 @@ nav ul {
     //padding-bottom:15px;
     font-size:@nav-size;
     font-weight:normal;
-    color:@content-font-color-invertet;
+    //color:@content-font-color-inverted;
     list-style: none; 
     margin-right: 5px;
     display:inline;
-  }                 
-  .item{
+    text-decoration: none;
+  }
+  li, a:hover {
+    text-decoration: none;
+    color: #BBB;
+  }
+  item{
     padding:15px;
     margin:15px;
   }
@@ -99,7 +104,7 @@ li #active{
 }
 
 a {
-  color:@link-color;
+  color: #999;
   font-weight:bold;
   text-decoration: none;
 //  display:inline;       
@@ -114,6 +119,7 @@ a:hover{
 
 
 p {
+  //margin: 15px 0 0 0;
 } 
 
 h1 {
@@ -305,7 +311,7 @@ footer{
 #twocol{   
   a {
     font-weight:normal;
-    color:@content-font-color-invertet;
+    color:@content-font-color-inverted;
   }   
   ul {
     padding-left:0px; 
@@ -444,8 +450,5 @@ input:focus, textarea:focus {
   color: #3B3B3B;
 }
 
-a {
-	color: #999;
-}
 
 

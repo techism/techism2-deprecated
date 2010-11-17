@@ -7,9 +7,9 @@ from techism2.events import event_service
  
 
 class UpcommingEventsRssFeed(Feed):
-    title = "Techism - IT-Events in München"
+    title = "Techism"
     link = "/events/"
-    description = "Upcomming IT-Events in München"
+    description = "Techism - Events, Projekte, Usergroups in München"
 
     def items(self):
         return event_service.get_event_query_set().order_by('date_time_begin')

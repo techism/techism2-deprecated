@@ -16,7 +16,7 @@ def ical(request):
     cal['prodid'] = icalendar.vText(u'-//Techism//Techism//DE')
     cal['version'] = icalendar.vText(u'2.0')
     cal['x-wr-calname'] = icalendar.vText(u'Techism')
-    cal['x-wr-caldesc'] = icalendar.vText(u'Techism - IT-Events in München')
+    cal['x-wr-caldesc'] = icalendar.vText(u'Techism - Events, Projekte, Usergroups in München')
     
     for e in event_list:
         event = icalendar.Event()

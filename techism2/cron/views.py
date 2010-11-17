@@ -1,11 +1,11 @@
 from django.http import HttpResponse
-from techism2 import service
+from techism2.events import event_service
 from techism2.organizations import org_service
 from datetime import datetime
 
 
 def update_event_tags_cache(request):
-    service.update_tags_cache()
+    event_service.update_tags_cache()
     response = HttpResponse()
     return response
 
@@ -16,7 +16,7 @@ def update_organization_tags_cache(request):
 
 def update_archived_flag(request):
     content = []
-    event_list = service.get_event_query_set().filter(date_time_begin__lte=datetime.utcnow()).order_by('date_time_begin')
+    event_list = event_service.get_event_query_set().filter(date_time_begin__lte=datetime.utcnow()).order_by('date_time_begin')
     content.append(u'Processing %s events' % event_list.count())
     for event in event_list:
         __update_archived_flag(event, content)

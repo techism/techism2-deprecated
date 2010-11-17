@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from techism2 import service
+from techism2.events import event_service
 from techism2.models import TweetedEvent
 from datetime import datetime, timedelta
 import tweepy
@@ -12,7 +13,7 @@ import logging
 def tweet_upcoming_events(request):
     today = datetime.utcnow() + timedelta(days=0)
     three_days = datetime.utcnow() + timedelta(days=3)
-    event_list = service.get_event_query_set().filter(date_time_begin__gte=today).filter(date_time_begin__lte=three_days).order_by('date_time_begin')
+    event_list = event_service.get_event_query_set().filter(date_time_begin__gte=today).filter(date_time_begin__lte=three_days).order_by('date_time_begin')
     
     for event in event_list:
         if __not_tweeted_yet(event):

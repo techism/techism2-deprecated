@@ -5,6 +5,7 @@ from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from techism2.models import Event, Location, StaticPage
 from techism2.events.forms import EventForm
+from techism2.events import event_service
 from techism2 import service
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
@@ -13,24 +14,24 @@ from django.utils import simplejson as json
 
 
 def index(request):
-    event_list = service.get_event_query_set().order_by('date_time_begin')
-    tags = service.get_tags()
+    event_list = event_service.get_event_query_set().order_by('date_time_begin')
+    tags = event_service.get_tags()
     page = __get_paginator_page(request, event_list)
     if page == -1:
         return HttpResponseNotFound()
     return render_to_response('events/index.html', {'event_list': page, 'tags': tags}, context_instance=RequestContext(request))
 
 def archive(request):
-    event_list = service.get_archived_event_query_set().order_by('-date_time_begin')
-    tags = service.get_tags()
+    event_list = event_service.get_archived_event_query_set().order_by('-date_time_begin')
+    tags = event_service.get_tags()
     page = __get_paginator_page(request, event_list)
     if page == -1:
         return HttpResponseNotFound()
     return render_to_response('events/index.html', {'event_list': page, 'tags': tags}, context_instance=RequestContext(request))
 
 def tag(request, tag_name):
-    event_list = service.get_event_query_set().filter(tags=tag_name).order_by('date_time_begin')
-    tags = service.get_tags()
+    event_list = event_service.get_event_query_set().filter(tags=tag_name).order_by('date_time_begin')
+    tags = event_service.get_tags()
     page = __get_paginator_page(request, event_list)
     if page == -1:
         return HttpResponseNotFound()
@@ -85,7 +86,7 @@ def edit(request, event_id):
 
 
 def show(request, event_id):
-    tags = service.get_tags()
+    tags = event_service.get_tags()
     event = Event.objects.get(id=event_id)
     return render_to_response(
         'events/show.html',

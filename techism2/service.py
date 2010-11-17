@@ -4,32 +4,19 @@ from techism2.models import Event, Setting
 from django.core.cache import cache
 from django.core.mail import send_mail
 
-tags_cache_key = "event_tags"
 
-
-def get_event_query_set():
-    "Gets a base query set with all non-archived and published events"
-    return __get_base_event_query_set().filter(archived__exact=False)
-
-def get_archived_event_query_set():
-    "Gets a base query set with all archived and published events"
-    return __get_base_event_query_set().filter(archived__exact=True)
-
-def __get_base_event_query_set():
-    return Event.objects.filter(published__exact=True)
-
-def get_tags():
+def get_tags(tags_cache_key, fn):
     # Note: no synchronization, propably not possible on GAE
     tags = cache.get(tags_cache_key)
     
     if tags:
         return tags
     else:
-        tags = update_tags_cache()
+        tags = update_tags_cache(tags_cache_key, fn)
         return tags
 
-def update_tags_cache():
-    dict_list = get_event_query_set().values('tags')
+def update_tags_cache(tags_cache_key, fn):
+    dict_list = fn().values('tags')
     tags = fetch_tags(dict_list)
     cache.set(tags_cache_key, tags, 1800) # expire after 30 min
     return tags

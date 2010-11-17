@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
-from techism2 import service
+from techism2.events import event_service
 
  
 
@@ -12,7 +12,7 @@ class UpcommingEventsRssFeed(Feed):
     description = "Upcomming IT-Events in München"
 
     def items(self):
-        return service.get_event_query_set().order_by('date_time_begin')
+        return event_service.get_event_query_set().order_by('date_time_begin')
 
     def item_title(self, item):
         if item.takes_more_than_one_day():

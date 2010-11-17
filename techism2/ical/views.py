@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.core.urlresolvers import reverse
-from techism2 import service
+from techism2.events import event_service
 from datetime import datetime, timedelta
 import icalendar
 import time
@@ -10,7 +10,7 @@ import time
 
 def ical(request):
     ninety_days = datetime.utcnow() + timedelta(days=90)
-    event_list = service.get_event_query_set().filter(date_time_begin__lte=ninety_days).order_by('date_time_begin')
+    event_list = event_service.get_event_query_set().filter(date_time_begin__lte=ninety_days).order_by('date_time_begin')
     
     cal = icalendar.Calendar()
     cal['prodid'] = icalendar.vText(u'-//Techism//Techism//DE')
@@ -34,7 +34,7 @@ def ical(request):
             createTimestamp = time.mktime(e.get_date_time_created_utc().timetuple())
             modifyTimestamp = time.mktime(e.get_date_time_modified_utc().timetuple())
             sequence = modifyTimestamp - createTimestamp
-        event['sequence'] = icalendar.vInt(sequence)
+        event['sequence'] = icalendar.vInt(sequence) + 1
         
         # created and last-modified
         if e.date_time_created:
@@ -45,18 +45,25 @@ def ical(request):
         # TENTATIVE, CONFIRMED, CANCELLED
         event['status'] = icalendar.vText(u'CONFIRMED')
         
+        relative_url = reverse('event-show', args=[e.id])
+        absolute_url = request.build_absolute_uri(relative_url)
+        event['url'] = icalendar.vUri(absolute_url)
+        
         if e.title:
             event['summary'] = icalendar.vText(e.title)
+        
+        description = u''
         if e.description:
-            event['description'] = icalendar.vText(e.description)
+            description += e.description
+        if e.url:
+            description += u'\n\nWebsite: ' + e.url
+        description += u'\n\nEvent Details: ' + absolute_url
+        event['description'] = icalendar.vText(description)
+        
         if e.date_time_begin:
             event['dtstart'] = icalendar.vDatetime(e.get_date_time_begin_utc())
         if e.date_time_end:
             event['dtend'] = icalendar.vDatetime(e.get_date_time_end_utc())
-        if e.url:
-            relative_url = reverse('event-show', args=[e.id])
-            absolute_url = request.build_absolute_uri(relative_url)
-            event['url'] = icalendar.vUri(absolute_url)
         
         # geo value isn't used by iCal readers :-(
         # maybe a trick is to add the geo coordinates to the location field using the following format:

@@ -30,7 +30,10 @@ def fetch_tags(dict_list):
                     if tag not in tags:
                         tags[tag] = 0
                     tags[tag] += 1
-    return tags
+    tag_list = []
+    for name,count in tags.items():
+        tag_list.append({'name':name,'count':count})
+    return tag_list
 
 def send_event_review_mail(event):
     subject = u'[Techism] Neues Event - bitte prüfen'

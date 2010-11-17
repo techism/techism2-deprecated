@@ -56,8 +56,12 @@ def ical(request):
         if e.description:
             description += e.description
         if e.url:
-            description += u'\n\nWebsite: ' + e.url
-        description += u'\n\nEvent Details: ' + absolute_url
+            if len(description) > 0:
+                description += u'\n\n'
+            description += u'Event Webseite: ' + e.url
+        if len(description) > 0:
+            description += u'\n\n'
+        description += u'Event bei Techism: ' + absolute_url
         event['description'] = icalendar.vText(description)
         
         if e.date_time_begin:

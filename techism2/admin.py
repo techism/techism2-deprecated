@@ -15,7 +15,7 @@ class LocationAdmin(admin.ModelAdmin):
     
 class OrganizationAdmin(admin.ModelAdmin):
     search_fields = ['title']
-    list_display = ['title', 'url']
+    list_display = ['title', 'url', 'tags']
 
 class StaticPageAdmin(admin.ModelAdmin):
     list_display = ['name', 'content']

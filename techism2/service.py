@@ -18,7 +18,7 @@ def get_tags(tags_cache_key, fn):
 def update_tags_cache(tags_cache_key, fn):
     dict_list = fn().values('tags')
     tags = fetch_tags(dict_list)
-    cache.set(tags_cache_key, tags, 1) # expire after 30 min
+    cache.set(tags_cache_key, tags, 1800) # expire after 30 min
     return tags
 
 def fetch_tags(dict_list):

@@ -1,8 +1,11 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models import signals
 from django.db import models
 from datetime import datetime, timedelta
+import time
 from techism2 import fields, utils
 
 class Location(models.Model):
@@ -99,6 +102,37 @@ class Event(models.Model):
         else:
             return 0;
                                             
+
+CHANGE_TYPE_CHOICES = (
+    ('C', 'Created'),
+    ('U', 'Updated'),
+    ('D', 'Canceled'),
+)
+class EventChangeLog(models.Model):
+    event = models.ForeignKey(Event)
+    change_type = models.CharField(max_length=1, choices=CHANGE_TYPE_CHOICES)
+    date_time = models.DateTimeField(auto_now_add=True)
+    
+    @receiver(signals.post_save, sender=Event, dispatch_uid="EventChangeLog")
+    def signal_receiver(sender, **kwargs):
+        '''
+        Creates a change log whenever an Event is created or updated
+        '''
+        event = kwargs['instance']
+        
+        ecl = EventChangeLog()
+        ecl.event = event
+        
+        createTimestamp = time.mktime(event.get_date_time_created_utc().timetuple())
+        modifyTimestamp = time.mktime(event.get_date_time_modified_utc().timetuple())
+        if ( modifyTimestamp - createTimestamp ) < 1:
+            ecl.change_type = 'C'
+        elif event.canceled:
+            ecl.change_type = 'D'
+        else:
+            ecl.change_type = 'U'
+        
+        ecl.save()
 
 class StaticPage(models.Model):
     name = models.CharField(max_length=200, primary_key=True)

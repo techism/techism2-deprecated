@@ -28,6 +28,12 @@ class UpcommingEventsRssFeed(Feed):
     def item_link(self, item):
         return "/events/" + str(item.id)
     
+    def author_name(self):
+        return "Techism"
+    
+    def item_pubdate(self, item):
+        return item.date_time_modified
+
 class UpcommingEventsAtomFeed(UpcommingEventsRssFeed):
     feed_type = Atom1Feed
 

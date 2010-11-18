@@ -1,15 +1,16 @@
 {% load web_tags %}
 <article class="event">
-	<header> 
+	<header{% if event.canceled %} class="canceled"{% endif %}> 
 		<section class="header-content"> 
 			<div class="title"> 
-				<h2><a id="{{ event.id }} event" href="#event">{{ event.title }}</a></h2>
+				<h2><a id="{{ event.id }} event" href="#event">{% if event.canceled %}Abgesagt! - {% endif %}{{ event.title }}</a></h2>
 			</div> 
 			{% if event.user == user or user.is_superuser %}
 				<div class="edit"> 
 					<div class="box">
-					 	<a href="/events/edit/{{ event.id }}/">Edit</a>
-					 	<a href="/events/create/{{ event.id }}/">Duplicate</a>
+					 	<a href="/events/edit/{{ event.id }}/">Ändern</a>
+					 	<a href="/events/cancel/{{ event.id }}/">Absagen</a>
+					 	<a href="/events/create/{{ event.id }}/">Kopieren</a>
 					</div>
 				</div>
 			{% endif %}
@@ -23,7 +24,7 @@
 			{% endif %}
 		</section>
 	</header>
-	<section class="detail">
+	<section class="detail{% if event.canceled %} canceled{% endif %}">
         <section>
             <div>
                 <a href="/events/{{ event.id }}/">Link zu dieser Detailseite</a>

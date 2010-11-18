@@ -384,3 +384,6 @@ textarea:focus {
   font-size: 10px;
   color: #3B3B3B;
 }
+.canceled {
+  text-decoration: line-through;
+}

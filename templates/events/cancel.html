@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <title>Techism - Cancel Event</title>
+    <meta name="description" content="Techism - {{ event.title }}" />
+    <meta name="keywords" content="techism, event, projekte, usergroups, münchen, {{ event.tags|default:''|join:', '|lower }}" />
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+    <script type="text/javascript" src="/static/js/googlemaps.js"></script>
+    <script type="text/javascript" src="/static/js/templates/show.js"></script>
+{% endblock %}
+
+{% block content %}
+
+<section id="content">
+	{% include "events/_event_details.html" %}
+	<div id="create" class="content">
+		<form action="" method="post">
+			{% csrf_token %}
+			{{ form.id }}
+			<div class="row submit"><p><input type="submit" value="Event absagen" /></p></div> 
+		</form>
+</section>
+
+{% endblock %}

@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from techism2.models import Event, Location, StaticPage
-from techism2.events.forms import EventForm
+from techism2.events.forms import EventForm, EventCancelForm
 from techism2.events import event_service
 from techism2 import service
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -68,6 +68,22 @@ def create(request, event_id=None):
         },
         context_instance=RequestContext(request))
 
+
+def cancel(request, event_id):
+    event = Event.objects.get(id=event_id)
+    
+    if request.method == 'POST':
+        return __cancel_event(request, event)
+    
+    return render_to_response(
+        'events/cancel.html',
+        {
+            'form:': EventCancelForm(),
+            'event': event
+        },
+        context_instance=RequestContext(request))
+
+
 def edit(request, event_id):
     button_label = u'Event \u00E4ndern'
     locations_as_json = __get_locations_as_json()
@@ -104,6 +120,23 @@ def show(request, event_id):
 def logout(request):
     django_logout(request)
     return HttpResponseRedirect('/')
+
+def __cancel_event(request, event):
+    form = EventCancelForm(request.POST) 
+    if form.is_valid():
+        event.canceled = True;
+        event.save()
+        url = reverse('event-show', args=[event.id])
+        return HttpResponseRedirect(url)
+    else:
+        return render_to_response(
+        'events/cancel.html',
+        {
+            'form:': form,
+            'error': form.errors,
+            'event': event
+        },
+        context_instance=RequestContext(request))
 
 def __save_event(request, button_label, locations_as_json, old_event=None):
     form = EventForm(request.POST) 

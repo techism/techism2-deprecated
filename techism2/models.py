@@ -37,6 +37,7 @@ class Event(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)
     archived = models.BooleanField()
     published = models.BooleanField()
+    canceled = models.BooleanField()
     date_time_created = models.DateTimeField(auto_now_add=True)
     date_time_modified = models.DateTimeField(auto_now=True)
     organization = models.ForeignKey(Organization, blank=True, null=True)

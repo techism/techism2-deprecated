@@ -103,15 +103,24 @@ class Event(models.Model):
             return 0;
                                             
 
-CHANGE_TYPE_CHOICES = (
-    ('C', 'Created'),
-    ('U', 'Updated'),
-    ('D', 'Canceled'),
-)
+class ChangeType:
+    CREATED = 'C'
+    UPDATED = 'U'
+    CANCELLED = 'D'
+    
+    Choices = (
+        ('C', 'Created'),
+        ('U', 'Updated'),
+        ('D', 'Canceled'),
+    )
+
 class EventChangeLog(models.Model):
     event = models.ForeignKey(Event)
-    change_type = models.CharField(max_length=1, choices=CHANGE_TYPE_CHOICES)
+    change_type = models.CharField(max_length=1, choices=ChangeType.Choices)
     date_time = models.DateTimeField(auto_now_add=True)
+    
+    def __unicode__(self):
+        return "(" + self.change_type + ") " + self.event.title
     
     @receiver(signals.post_save, sender=Event, dispatch_uid="EventChangeLog")
     def signal_receiver(sender, **kwargs):
@@ -126,11 +135,11 @@ class EventChangeLog(models.Model):
         createTimestamp = time.mktime(event.get_date_time_created_utc().timetuple())
         modifyTimestamp = time.mktime(event.get_date_time_modified_utc().timetuple())
         if ( modifyTimestamp - createTimestamp ) < 1:
-            ecl.change_type = 'C'
+            ecl.change_type = ChangeType.CREATED
         elif event.canceled:
-            ecl.change_type = 'D'
+            ecl.change_type = ChangeType.CANCELLED
         else:
-            ecl.change_type = 'U'
+            ecl.change_type = ChangeType.UPDATED
         
         ecl.save()
 

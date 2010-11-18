@@ -3,7 +3,8 @@ from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from techism2 import service
 from techism2.events import event_service
-from techism2.models import TweetedEvent
+from techism2.models import TweetedEvent, EventChangeLog
+from techism2.rss import utils
 from datetime import datetime, timedelta
 import tweepy
 from tweepy.error import TweepError
@@ -16,7 +17,7 @@ def tweet_upcoming_events(request):
     event_list = event_service.get_event_query_set().filter(date_time_begin__gte=today).filter(date_time_begin__lte=three_days).order_by('date_time_begin')
     
     for event in event_list:
-        if __not_tweeted_yet(event):
+        if __not_tweeted_yet_or_updated_since_tweet(event):
             tweet = __format_tweet(request, event)
             try:
                 __tweet_event(tweet)
@@ -32,10 +33,22 @@ def tweet_upcoming_events(request):
     response = HttpResponse()
     return response
 
-def __not_tweeted_yet(event):
-    return not TweetedEvent.objects.filter(event=event).exists()
+def __not_tweeted_yet_or_updated_since_tweet(event):
+    tweeted_event_list = TweetedEvent.objects.filter(event=event)
+    if not tweeted_event_list.exists():
+        return True
+    else:
+        tweeted_event = tweeted_event_list[0]
+        tweed_date_time = tweeted_event.date_time_created
+        change_log_items = EventChangeLog.objects.filter(event=event).filter(date_time__gte=tweed_date_time).order_by('date_time')
+        if change_log_items.exists():
+            tweeted_event.delete()
+            return True
+    return False
 
 def __format_tweet(request, event):
+    prefix = utils.get_change_log_prefix(event)
+    
     if event.takes_more_than_one_day():
         date_string = event.get_date_time_begin_cet().strftime("%d.%m.%Y") + "-" + event.get_date_time_end_cet().strftime("%d.%m.%Y")
     else:
@@ -46,10 +59,10 @@ def __format_tweet(request, event):
     long_url = base_url + relative_url
     short_url = __shorten_url(long_url)
     
-    max_length = 140 - len(date_string) - len(short_url) - 5
+    max_length = 140 - len(date_string) - len(short_url) - len(prefix) - 5
     title = event.title[:max_length]
     
-    tweet = u'%s - %s %s' % (title, date_string, short_url)
+    tweet = u'%s%s - %s %s' % (prefix, title, date_string, short_url)
     
     return tweet
 
@@ -69,6 +82,9 @@ def __shorten_url(url):
     raise error
 
 def __tweet_event(tweet):
+    logging.debug(tweet)
+
+def __tweet_event2(tweet):
     CONSUMER_KEY = service.get_setting('twitter_consumer_key')
     CONSUMER_SECRET = service.get_setting('twitter_consumer_secret')
     ACCESS_KEY = service.get_setting('twitter_access_key')

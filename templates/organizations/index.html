@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title>Techism - {{ tag_name|default:'Events, Projekte, Usergroups in München!' }}</title>
-    <meta name="description" content="Techism - {{ tag_name|default:'Events, Projekte, Usergroups in München!' }}" />
-    <meta name="keywords" content="techism, event, projekte, usergroups, münchen{% if tag_name %}, {{ tag_name|lower }}{% endif %}" />
+    <title>Techism - {{ tag_name|default:'Events, Projekte, Usergroups in MÃ¼nchen!' }}</title>
+    <meta name="description" content="Techism - {{ tag_name|default:'Events, Projekte, Usergroups in MÃ¼nchen!' }}" />
+    <meta name="keywords" content="techism, event, projekte, usergroups, mÃ¼nchen{% if tag_name %}, {{ tag_name|lower }}{% endif %}" />
 {% endblock %}
 
 {% block content %}
@@ -28,7 +28,7 @@
 		{% endfor %}   
 	{% else %}
 		<section class="content">
-			<p>Bitte Organisationen anhand der Tags unten auswählen.</p>
+			<p>Bitte Organisationen anhand der Tags unten auswÃ¤hlen.</p>
 		</section>
 	{% endif %} 
 </section>

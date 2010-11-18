@@ -47,17 +47,22 @@ def __render_static_page(request, name):
     page, created = StaticPage.objects.get_or_create(name=name, defaults={'content': u'<section id="content">Bitte Inhalt einf\u00FCgen.</section>'})
     return render_to_response('events/static.html', {'content': page.content}, context_instance=RequestContext(request))
 
-def create(request):
+def create(request, event_id=None):
     button_label = u'Event hinzuf\u00FCgen'
     locations_as_json = __get_locations_as_json()
     
     if request.method == 'POST':
         return __save_event(request, button_label, locations_as_json)
     
+    form = EventForm()
+    if event_id:
+        event = Event.objects.get(id=event_id)
+        form = __to_event_form(event)
+    
     return render_to_response(
         'events/create.html',
         {
-            'form': EventForm(),
+            'form': form,
             'button_label': button_label,
             'locations_as_json': locations_as_json
         },

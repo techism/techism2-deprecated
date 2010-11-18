@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
 from techism2.models import Event, Location, StaticPage
-from techism2.events.forms import EventForm
+from techism2.events.forms import EventForm, EventCancelForm
 from techism2.events import event_service
 from techism2 import service
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -12,27 +12,26 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as django_logout
 from django.utils import simplejson as json
 
-tags_cache_key = "event_tags"
 
 def index(request):
-    event_list = service.get_event_query_set().order_by('date_time_begin')
-    tags = event_service.get_tags(tags_cache_key)
+    event_list = event_service.get_event_query_set().order_by('date_time_begin')
+    tags = event_service.get_tags()
     page = __get_paginator_page(request, event_list)
     if page == -1:
         return HttpResponseNotFound()
     return render_to_response('events/index.html', {'event_list': page, 'tags': tags}, context_instance=RequestContext(request))
 
 def archive(request):
-    event_list = service.get_archived_event_query_set().order_by('-date_time_begin')
-    tags = event_service.get_tags(tags_cache_key)
+    event_list = event_service.get_archived_event_query_set().order_by('-date_time_begin')
+    tags = event_service.get_tags()
     page = __get_paginator_page(request, event_list)
     if page == -1:
         return HttpResponseNotFound()
     return render_to_response('events/index.html', {'event_list': page, 'tags': tags}, context_instance=RequestContext(request))
 
 def tag(request, tag_name):
-    event_list = service.get_event_query_set().filter(tags=tag_name).order_by('date_time_begin')
-    tags = event_service.get_tags(tags_cache_key)
+    event_list = event_service.get_event_query_set().filter(tags=tag_name).order_by('date_time_begin')
+    tags = event_service.get_tags()
     page = __get_paginator_page(request, event_list)
     if page == -1:
         return HttpResponseNotFound()
@@ -48,21 +47,42 @@ def __render_static_page(request, name):
     page, created = StaticPage.objects.get_or_create(name=name, defaults={'content': u'<section id="content">Bitte Inhalt einf\u00FCgen.</section>'})
     return render_to_response('events/static.html', {'content': page.content}, context_instance=RequestContext(request))
 
-def create(request):
+def create(request, event_id=None):
     button_label = u'Event hinzuf\u00FCgen'
     locations_as_json = __get_locations_as_json()
     
     if request.method == 'POST':
         return __save_event(request, button_label, locations_as_json)
     
+    form = EventForm()
+    if event_id:
+        event = Event.objects.get(id=event_id)
+        form = __to_event_form(event)
+    
     return render_to_response(
-        'events/event.html',
+        'events/create.html',
         {
-            'form': EventForm(),
+            'form': form,
             'button_label': button_label,
             'locations_as_json': locations_as_json
         },
         context_instance=RequestContext(request))
+
+
+def cancel(request, event_id):
+    event = Event.objects.get(id=event_id)
+    
+    if request.method == 'POST':
+        return __cancel_event(request, event)
+    
+    return render_to_response(
+        'events/cancel.html',
+        {
+            'form:': EventCancelForm(),
+            'event': event
+        },
+        context_instance=RequestContext(request))
+
 
 def edit(request, event_id):
     button_label = u'Event \u00E4ndern'
@@ -77,7 +97,7 @@ def edit(request, event_id):
     
     form = __to_event_form(event)
     return render_to_response(
-        'events/event.html',
+        'events/create.html',
         {
             'form': form,
             'button_label': button_label,
@@ -87,7 +107,7 @@ def edit(request, event_id):
 
 
 def show(request, event_id):
-    tags = event_service.get_tags(tags_cache_key)
+    tags = event_service.get_tags()
     event = Event.objects.get(id=event_id)
     return render_to_response(
         'events/show.html',
@@ -101,17 +121,34 @@ def logout(request):
     django_logout(request)
     return HttpResponseRedirect('/')
 
+def __cancel_event(request, event):
+    form = EventCancelForm(request.POST) 
+    if form.is_valid():
+        event.canceled = True;
+        event.save()
+        url = reverse('event-show', args=[event.id])
+        return HttpResponseRedirect(url)
+    else:
+        return render_to_response(
+        'events/cancel.html',
+        {
+            'form:': form,
+            'error': form.errors,
+            'event': event
+        },
+        context_instance=RequestContext(request))
+
 def __save_event(request, button_label, locations_as_json, old_event=None):
     form = EventForm(request.POST) 
     if form.is_valid(): 
         event= __create_or_update_event_with_location(form, request.user, old_event)
         if not event.published:
-            event_service.send_event_review_mail(event)
+            service.send_event_review_mail(event)
         url = reverse('event-show', args=[event.id])
         return HttpResponseRedirect(url)
     else:
         return render_to_response(
-            'events/event.html',
+            'events/create.html',
             {
                 'form': form, 
                 'error': form.errors,

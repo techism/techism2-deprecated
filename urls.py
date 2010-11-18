@@ -10,12 +10,15 @@ urlpatterns = patterns('',
     (r'^events/$', 'techism2.events.views.index'),
     url(r'^events/(?P<event_id>\d+)/$', 'techism2.events.views.show', name='event-show'),
     (r'^events/edit/(?P<event_id>\d+)/$', 'techism2.events.views.edit'),
+    (r'^events/cancel/(?P<event_id>\d+)/$', 'techism2.events.views.cancel'),
+    (r'^events/create/(?P<event_id>\d+)/$', 'techism2.events.views.create'),
     (r'^events/create/$', 'techism2.events.views.create'),
     (r'^events/archive/$', 'techism2.events.views.archive'),
     (r'^events/tags/(?P<tag_name>.+)/$', 'techism2.events.views.tag'),
     
     # organizations
     (r'^organizations/$', 'techism2.organizations.views.index'),
+    (r'^organizations/tags/(?P<tag_name>.+)/$', 'techism2.organizations.views.tag'),
     
     # static pages
     (r'^impressum/$', 'techism2.events.views.static_impressum'),

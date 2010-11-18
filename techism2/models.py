@@ -1,8 +1,11 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models import signals
 from django.db import models
 from datetime import datetime, timedelta
+import time
 from techism2 import fields, utils
 
 class Location(models.Model):
@@ -37,6 +40,7 @@ class Event(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)
     archived = models.BooleanField()
     published = models.BooleanField()
+    canceled = models.BooleanField()
     date_time_created = models.DateTimeField(auto_now_add=True)
     date_time_modified = models.DateTimeField(auto_now=True)
     organization = models.ForeignKey(Organization, blank=True, null=True)
@@ -98,6 +102,46 @@ class Event(models.Model):
         else:
             return 0;
                                             
+
+class ChangeType:
+    CREATED = 'C'
+    UPDATED = 'U'
+    CANCELLED = 'D'
+    
+    Choices = (
+        ('C', 'Created'),
+        ('U', 'Updated'),
+        ('D', 'Canceled'),
+    )
+
+class EventChangeLog(models.Model):
+    event = models.ForeignKey(Event)
+    change_type = models.CharField(max_length=1, choices=ChangeType.Choices)
+    date_time = models.DateTimeField(auto_now_add=True)
+    
+    def __unicode__(self):
+        return "(" + self.change_type + ") " + self.event.title
+    
+    @receiver(signals.post_save, sender=Event, dispatch_uid="EventChangeLog")
+    def signal_receiver(sender, **kwargs):
+        '''
+        Creates a change log whenever an Event is created or updated
+        '''
+        event = kwargs['instance']
+        
+        ecl = EventChangeLog()
+        ecl.event = event
+        
+        createTimestamp = time.mktime(event.get_date_time_created_utc().timetuple())
+        modifyTimestamp = time.mktime(event.get_date_time_modified_utc().timetuple())
+        if ( modifyTimestamp - createTimestamp ) < 1:
+            ecl.change_type = ChangeType.CREATED
+        elif event.canceled:
+            ecl.change_type = ChangeType.CANCELLED
+        else:
+            ecl.change_type = ChangeType.UPDATED
+        
+        ecl.save()
 
 class StaticPage(models.Model):
     name = models.CharField(max_length=200, primary_key=True)

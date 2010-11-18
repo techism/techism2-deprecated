@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block head %}
-    <title>Techism - {{ event.title }}</title>
+    <title>Techism - Cancel Event</title>
     <meta name="description" content="Techism - {{ event.title }}" />
     <meta name="keywords" content="techism, event, projekte, usergroups, münchen, {{ event.tags|default:''|join:', '|lower }}" />
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -12,21 +12,13 @@
 {% block content %}
 
 <section id="content">
-	{% if event.published %}
-		{% include "events/_event_details.html" %}
-	{% else %}
-		<article class="event">
-			<section class="detail">
-				<h3>Dieses Event ist noch nicht veröffentlicht.</h3>
-				<p class="description"> 
-					Neue Events werden erst nach einem Review freigeschaltet - 
-					leider nötig um "Spam"-Listungen zu vermeiden.
-				</p>
-			</section>
-		</article>
-		{% endif %} 
+	{% include "events/_event_details.html" %}
+	<div id="create" class="content">
+		<form action="" method="post">
+			{% csrf_token %}
+			{{ form.id }}
+			<div class="row submit"><p><input type="submit" value="Event absagen" /></p></div> 
+		</form>
 </section>
-
-{% include "events/_tagcloud.html" %}
 
 {% endblock %}

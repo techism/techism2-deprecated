@@ -18,7 +18,7 @@ def get_tags(tags_cache_key, fn):
 def update_tags_cache(tags_cache_key, fn):
     dict_list = fn().values('tags')
     tags = fetch_tags(dict_list)
-    cache.set(tags_cache_key, tags, 1800) # expire after 30 min
+    cache.set(tags_cache_key, tags, 1) # expire after 30 min
     return tags
 
 def fetch_tags(dict_list):
@@ -30,9 +30,20 @@ def fetch_tags(dict_list):
                     if tag not in tags:
                         tags[tag] = 0
                     tags[tag] += 1
+    
+    # create tag list, each list item is a dict containing tag name and count
     tag_list = []
     for name,count in tags.items():
         tag_list.append({'name':name,'count':count})
+    
+    # calculate weigth for each tag
+    tag_list = sorted(tag_list, key=lambda k: k['count'])
+    lb = tag_list[0]['count']
+    ub = tag_list[-1]['count']
+    quotient = float(ub - lb + 1) / 9
+    for tag in tag_list:
+        tag['weigth'] = int(tag['count'] / quotient)
+    
     return tag_list
 
 def send_event_review_mail(event):

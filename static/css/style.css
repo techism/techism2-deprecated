@@ -144,6 +144,36 @@ h3 {
   text-decoration: none;
   border: 1px solid grey;
 }
+#tagcloud a.tag0 {
+  color: #B7B7B7;
+}
+#tagcloud a.tag1 {
+  color: #BFBFBF;
+}
+#tagcloud a.tag2 {
+  color: #C7C7C7;
+}
+#tagcloud a.tag3 {
+  color: #CFCFCF;
+}
+#tagcloud a.tag4 {
+  color: #D7D7D7;
+}
+#tagcloud a.tag5 {
+  color: #DFDFDF;
+}
+#tagcloud a.tag6 {
+  color: #E7E7E7;
+}
+#tagcloud a.tag7 {
+  color: #EFEFEF;
+}
+#tagcloud a.tag8 {
+  color: #F7F7F7;
+}
+#tagcloud a.tag9 {
+  color: #FFFFFF;
+}
 #tagcloud a:hover {
   border: 1px solid #00ff00;
 }

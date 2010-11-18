@@ -43,7 +43,10 @@ def ical(request):
             event['last-modified'] = icalendar.vDatetime(e.get_date_time_modified_utc())
         
         # TENTATIVE, CONFIRMED, CANCELLED
-        event['status'] = icalendar.vText(u'CONFIRMED')
+        if e.canceled:
+            event['status'] = icalendar.vText(u'CANCELLED')
+        else:
+            event['status'] = icalendar.vText(u'CONFIRMED')
         
         relative_url = reverse('event-show', args=[e.id])
         absolute_url = request.build_absolute_uri(relative_url)

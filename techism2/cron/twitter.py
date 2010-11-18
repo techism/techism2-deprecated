@@ -82,9 +82,6 @@ def __shorten_url(url):
     raise error
 
 def __tweet_event(tweet):
-    logging.debug(tweet)
-
-def __tweet_event2(tweet):
     CONSUMER_KEY = service.get_setting('twitter_consumer_key')
     CONSUMER_SECRET = service.get_setting('twitter_consumer_secret')
     ACCESS_KEY = service.get_setting('twitter_access_key')

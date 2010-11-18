@@ -33,6 +33,11 @@ def fetch_tags(dict_list):
     
     # create tag list, each list item is a dict containing tag name and count
     tag_list = []
+    
+    if len(tags) == 0:
+        return tag_list
+        
+    
     for name,count in tags.items():
         tag_list.append({'name':name,'count':count})
     

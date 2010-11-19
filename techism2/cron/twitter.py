@@ -26,7 +26,7 @@ def tweet_upcoming_events(request):
             except TweepError, e:
                 logging.error(e.reason)
                 if e.reason == u'Status is a duplicate.':
-                    __mark_as_tweeted(event, 'TweepError: Status is a duplicate.')
+                    __mark_as_tweeted(event, tweet + " (duplicate)")
                     break
                 else:
                     raise e

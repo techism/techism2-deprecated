@@ -171,3 +171,14 @@ indexes:
   properties:
   - name: __key__
     direction: desc
+
+- kind: techism2_tweetedevent
+  properties:
+  - name: event_id
+  - name: date_time_created
+
+- kind: techism2_tweetedevent
+  properties:
+  - name: event_id
+  - name: date_time_created
+    direction: desc

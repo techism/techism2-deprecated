@@ -11,10 +11,10 @@ class EventAdmin(admin.ModelAdmin):
 
 class EventChangeLogAdmin(admin.ModelAdmin):
     list_filter = ['change_type']
-    list_display = ['event', 'change_type', 'date_time']
+    list_display = ['event', 'event_title', 'change_type', 'date_time']
 
 class TweetedEventAdmin(admin.ModelAdmin):
-    list_display = ['event', 'date_time_created']
+    list_display = ['event', 'tweet', 'date_time_created']
 
 class LocationAdmin(admin.ModelAdmin):
     search_fields = ['name', 'street', 'city']

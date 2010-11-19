@@ -6,12 +6,12 @@ from datetime import datetime
 
 def update_event_tags_cache(request):
     event_service.update_tags_cache()
-    response = HttpResponse()
+    response = HttpResponse(str(event_service.get_tags()))
     return response
 
 def update_organization_tags_cache(request):
     org_service.update_tags_cache()
-    response = HttpResponse()
+    response = HttpResponse(str(org_service.get_tags()))
     return response
 
 def update_archived_flag(request):

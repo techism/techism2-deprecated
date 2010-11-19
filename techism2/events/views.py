@@ -11,6 +11,7 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.contrib.auth import logout as django_logout
 from django.utils import simplejson as json
+from django.utils import html
 
 
 def index(request):
@@ -240,9 +241,9 @@ def __get_locations_as_json():
     locations = dict()
     for location in location_list:
         locations[location.id] = dict()
-        locations[location.id]['name'] = location.name
-        locations[location.id]['street'] = location.street
-        locations[location.id]['city'] = location.city
+        locations[location.id]['name'] = html.escape(location.name)
+        locations[location.id]['street'] = html.escape(location.street)
+        locations[location.id]['city'] = html.escape(location.city)
     locations_as_json = json.dumps(locations)
     return locations_as_json
 

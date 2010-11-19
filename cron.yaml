@@ -1,6 +1,6 @@
 cron:
 - description: keep alive
-  url: /
+  url: /keepalive/
   schedule: every 2 minutes
 
 - description: update event.archived flag
@@ -11,11 +11,11 @@ cron:
   url: /cron/update_event_tags_cache
   schedule: every 30 minutes
   
-- description: update organizations tags cache
+- description: update organization tags cache
   url: /cron/update_organization_tags_cache
   schedule: every 30 minutes
 
-- description: update tags cache
+- description: tweet upcoming events
   url: /cron/tweet_upcoming_events
   schedule: every 10 minutes
 

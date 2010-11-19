@@ -1,9 +1,9 @@
 {% load web_tags %}
 <article class="event">
-	<header{% if event.canceled %} class="canceled"{% endif %}> 
+	<header> 
 		<section class="header-content"> 
 			<div class="title"> 
-				<h2><a id="{{ event.id }} event" href="#event">{% if event.canceled %}Abgesagt! - {% endif %}{{ event.title }}</a></h2>
+				<h2>{% if event.canceled %}[Abgesagt] {% endif %}<a id="{{ event.id }} event"{% if event.canceled %} class="canceled"{% endif %} href="#event">{{ event.title }}</a></h2>
 			</div> 
 			{% if event.user == user or user.is_superuser %}
 				<div class="edit"> 

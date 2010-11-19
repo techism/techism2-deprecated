@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from techism2 import service
 from techism2.events import event_service
-from techism2.models import TweetedEvent
+from techism2.models import TweetedEvent, EventChangeLog
 from datetime import datetime, timedelta
 import tweepy
 from tweepy.error import TweepError
@@ -16,26 +16,45 @@ def tweet_upcoming_events(request):
     event_list = event_service.get_event_query_set().filter(date_time_begin__gte=today).filter(date_time_begin__lte=three_days).order_by('date_time_begin')
     
     for event in event_list:
-        if __not_tweeted_yet(event):
-            tweet = __format_tweet(request, event)
+        must_tweet, prefix = __must_tweet_and_prefix(event)
+        if must_tweet:
+            tweet = __format_tweet(event, prefix)
             try:
                 __tweet_event(tweet)
-                __mark_as_tweeted(event)
+                __mark_as_tweeted(event, tweet)
                 break
             except TweepError, e:
                 logging.error(e.reason)
                 if e.reason == u'Status is a duplicate.':
-                    __mark_as_tweeted(event)
+                    __mark_as_tweeted(event, tweet + " (duplicate)")
                     break
                 else:
                     raise e
     response = HttpResponse()
     return response
 
-def __not_tweeted_yet(event):
-    return not TweetedEvent.objects.filter(event=event).exists()
+def __must_tweet_and_prefix(event):
+    # get last tweet
+    tweet = None
+    tweet_list = TweetedEvent.objects.filter(event=event).order_by('-date_time_created')
+    if tweet_list.exists():
+        tweet = tweet_list[0]
+    
+    # determine if we must tweet and the used prefix
+    if event.canceled:
+        if tweet is None or not tweet.tweet.startswith('[Abgesagt] '):
+            return (True, '[Abgesagt] ')
+    else:
+        if tweet is None:
+            return (True, '')
+        elif not tweet.tweet.startswith('[Update] '):
+            cl_list = EventChangeLog.objects.filter(event=event).filter(date_time__gte=tweet.date_time_created).order_by('-date_time')
+            if cl_list.exists():
+                return (True, '[Update] ')
+    
+    return (False, '')
 
-def __format_tweet(request, event):
+def __format_tweet(event, prefix):
     if event.takes_more_than_one_day():
         date_string = event.get_date_time_begin_cet().strftime("%d.%m.%Y") + "-" + event.get_date_time_end_cet().strftime("%d.%m.%Y")
     else:
@@ -46,10 +65,10 @@ def __format_tweet(request, event):
     long_url = base_url + relative_url
     short_url = __shorten_url(long_url)
     
-    max_length = 140 - len(date_string) - len(short_url) - 5
+    max_length = 140 - len(date_string) - len(short_url) - len(prefix) - 5
     title = event.title[:max_length]
     
-    tweet = u'%s - %s %s' % (title, date_string, short_url)
+    tweet = u'%s%s - %s %s' % (prefix, title, date_string, short_url)
     
     return tweet
 
@@ -78,8 +97,9 @@ def __tweet_event(tweet):
     api = tweepy.API(auth)
     api.update_status(tweet)
 
-def __mark_as_tweeted(event):
+def __mark_as_tweeted(event, tweet):
     tweeted_event = TweetedEvent()
     tweeted_event.event = event
+    tweeted_event.tweet = tweet
     tweeted_event.save()
 

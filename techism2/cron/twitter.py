@@ -94,5 +94,6 @@ def __tweet_event(tweet):
 def __mark_as_tweeted(event):
     tweeted_event = TweetedEvent()
     tweeted_event.event = event
+    tweeted_event.event_title = event.title
     tweeted_event.save()
 

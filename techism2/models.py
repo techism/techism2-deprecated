@@ -115,11 +115,9 @@ class ChangeType:
 
 class EventChangeLog(models.Model):
     event = models.ForeignKey(Event)
+    event_title = models.CharField(max_length=200)
     change_type = models.CharField(max_length=1, choices=ChangeType.Choices)
     date_time = models.DateTimeField(auto_now_add=True)
-    
-    def __unicode__(self):
-        return "(" + self.change_type + ") " + self.event.title
 
 class StaticPage(models.Model):
     name = models.CharField(max_length=200, primary_key=True)
@@ -135,6 +133,7 @@ class Setting(models.Model):
 
 class TweetedEvent(models.Model):
     event = models.ForeignKey(Event)
+    event_title = models.CharField(max_length=200)
     date_time_created = models.DateTimeField(auto_now_add=True)
     date_time_modified = models.DateTimeField(auto_now=True)
 
@@ -161,6 +160,7 @@ def write_event_change_log(sender, **kwargs):
     
     ecl = EventChangeLog()
     ecl.event = event
+    ecl.event_title = event.title
     
     createTimestamp = time.mktime(event.get_date_time_created_utc().timetuple())
     modifyTimestamp = time.mktime(event.get_date_time_modified_utc().timetuple())

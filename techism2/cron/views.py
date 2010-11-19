@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from techism2.events import event_service
-from techism2.organizations import org_service
+from techism2.orgs import org_service
 from datetime import datetime
 
 

@@ -34,7 +34,7 @@
 		<section class="what">
 			<h3>Was</h3>
 			<p class="description">	
-				{{ event.description|linebreaks }} <a id="url" href="{{ event.url }}">Website</a>
+				{{ event.description|linebreaks }} <a id="url" target="_blank" href="{{ event.url }}">Website</a>
 			</p>
 			<p id="tags">
 				{% for tag in event.tags %}

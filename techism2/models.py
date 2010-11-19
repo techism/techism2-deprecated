@@ -27,7 +27,6 @@ class Organization (models.Model):
     
     def __unicode__(self):
         return self.title;
-    
 
 class Event(models.Model):
     title = models.CharField(max_length=200)
@@ -121,27 +120,6 @@ class EventChangeLog(models.Model):
     
     def __unicode__(self):
         return "(" + self.change_type + ") " + self.event.title
-    
-    @receiver(signals.post_save, sender=Event, dispatch_uid="EventChangeLog")
-    def signal_receiver(sender, **kwargs):
-        '''
-        Creates a change log whenever an Event is created or updated
-        '''
-        event = kwargs['instance']
-        
-        ecl = EventChangeLog()
-        ecl.event = event
-        
-        createTimestamp = time.mktime(event.get_date_time_created_utc().timetuple())
-        modifyTimestamp = time.mktime(event.get_date_time_modified_utc().timetuple())
-        if ( modifyTimestamp - createTimestamp ) < 1:
-            ecl.change_type = ChangeType.CREATED
-        elif event.canceled:
-            ecl.change_type = ChangeType.CANCELLED
-        else:
-            ecl.change_type = ChangeType.UPDATED
-        
-        ecl.save()
 
 class StaticPage(models.Model):
     name = models.CharField(max_length=200, primary_key=True)
@@ -159,7 +137,39 @@ class TweetedEvent(models.Model):
     event = models.ForeignKey(Event)
     date_time_created = models.DateTimeField(auto_now_add=True)
     date_time_modified = models.DateTimeField(auto_now=True)
+
+@receiver(signals.pre_save, sender=Organization, dispatch_uid="techism2.model.Organization")
+def org_tags_to_lower(sender, **kwargs):
+    org = kwargs['instance']
+    if org.tags:
+        for index in range(len(org.tags)):
+            org.tags[index] = org.tags[index].lower()
+
+@receiver(signals.pre_save, sender=Event, dispatch_uid="techism2.model.Event")
+def event_tags_to_lower(sender, **kwargs):
+    event = kwargs['instance']
+    if event.tags:
+        for index in range(len(event.tags)):
+            event.tags[index] = event.tags[index].lower()
+
+@receiver(signals.post_save, sender=Event, dispatch_uid="techism2.model.EventChangeLog")
+def write_event_change_log(sender, **kwargs):
+    '''
+    Creates a change log whenever an Event is created or updated
+    '''
+    event = kwargs['instance']
     
-
-
+    ecl = EventChangeLog()
+    ecl.event = event
+    
+    createTimestamp = time.mktime(event.get_date_time_created_utc().timetuple())
+    modifyTimestamp = time.mktime(event.get_date_time_modified_utc().timetuple())
+    if ( modifyTimestamp - createTimestamp ) < 1:
+        ecl.change_type = ChangeType.CREATED
+    elif event.canceled:
+        ecl.change_type = ChangeType.CANCELLED
+    else:
+        ecl.change_type = ChangeType.UPDATED
+    
+    ecl.save()
 

@@ -4,7 +4,6 @@ from django.utils import simplejson as json
 from techism2 import service
 from techism2.events import event_service
 from techism2.models import TweetedEvent, EventChangeLog
-from techism2.rss import utils
 from datetime import datetime, timedelta
 import tweepy
 from tweepy.error import TweepError
@@ -17,9 +16,9 @@ def tweet_upcoming_events(request):
     event_list = event_service.get_event_query_set().filter(date_time_begin__gte=today).filter(date_time_begin__lte=three_days).order_by('date_time_begin')
     
     for event in event_list:
-        tweeted_event_list = TweetedEvent.objects.filter(event=event).order_by('-date_time_created')
-        if __not_tweeted_yet_or_updated_since_tweet(event, tweeted_event_list):
-            tweet = __format_tweet(request, event, tweeted_event_list)
+        must_tweet, prefix = __must_tweet_and_prefix(event)
+        if must_tweet:
+            tweet = __format_tweet(event, prefix)
             try:
                 __tweet_event(tweet)
                 __mark_as_tweeted(event, tweet)
@@ -34,22 +33,28 @@ def tweet_upcoming_events(request):
     response = HttpResponse()
     return response
 
-def __not_tweeted_yet_or_updated_since_tweet(event, tweeted_event_list):
-    if not tweeted_event_list.exists():
-        return True
-    else:
-        tweeted_event = tweeted_event_list[0]
-        tweed_date_time = tweeted_event.date_time_created
-        change_log_items = EventChangeLog.objects.filter(event=event).filter(date_time__gte=tweed_date_time).order_by('date_time')
-        if change_log_items.exists():
-            return True
-    return False
-
-def __format_tweet(request, event, tweeted_event_list):
-    prefix = ''
-    if tweeted_event_list.exists():
-        prefix = utils.get_change_log_prefix(event)
+def __must_tweet_and_prefix(event):
+    # get last tweet
+    tweet = None
+    tweet_list = TweetedEvent.objects.filter(event=event).order_by('-date_time_created')
+    if tweet_list.exists():
+        tweet = tweet_list[0]
     
+    # determine if we must tweet and the used prefix
+    if event.canceled:
+        if tweet is None or not tweet.tweet.startswith('[Abgesagt] '):
+            return (True, '[Abgesagt] ')
+    else:
+        if tweet is None:
+            return (True, '')
+        elif not tweet.tweet.startswith('[Update] '):
+            cl_list = EventChangeLog.objects.filter(event=event).filter(date_time__gte=tweet.date_time_created).order_by('-date_time')
+            if cl_list.exists():
+                return (True, '[Update] ')
+    
+    return (False, '')
+
+def __format_tweet(event, prefix):
     if event.takes_more_than_one_day():
         date_string = event.get_date_time_begin_cet().strftime("%d.%m.%Y") + "-" + event.get_date_time_end_cet().strftime("%d.%m.%Y")
     else:

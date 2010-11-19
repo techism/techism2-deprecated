@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
+from django.utils import html
 from techism2.rss import utils
 from techism2.events import event_service
 
@@ -20,10 +21,16 @@ class UpcommingEventsRssFeed(Feed):
             dateString = item.get_date_time_begin_cet().strftime("%d.%m.%Y") + "-" + item.get_date_time_end_cet().strftime("%d.%m.%Y")
         else:
             dateString = item.get_date_time_begin_cet().strftime("%d.%m.%Y %H:%M")
-        return prefix + item.title + " - " + dateString
+        title = prefix + item.title + " - " + dateString
+        # escape title (html tags)
+        return html.escape(title)
 
     def item_description(self, item):
-        return item.description
+        # escape description (html tags)
+        description = html.escape(item.description)
+        # add html linebreaks
+        description = html.linebreaks(description)
+        return description
     
     def item_link(self, item):
         return "/events/" + str(item.id)

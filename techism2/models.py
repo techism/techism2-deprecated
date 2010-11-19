@@ -133,7 +133,7 @@ class Setting(models.Model):
 
 class TweetedEvent(models.Model):
     event = models.ForeignKey(Event)
-    event_title = models.CharField(max_length=200)
+    tweet = models.CharField(max_length=200)
     date_time_created = models.DateTimeField(auto_now_add=True)
     date_time_modified = models.DateTimeField(auto_now=True)
 

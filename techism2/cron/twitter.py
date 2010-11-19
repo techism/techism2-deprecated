@@ -17,24 +17,24 @@ def tweet_upcoming_events(request):
     event_list = event_service.get_event_query_set().filter(date_time_begin__gte=today).filter(date_time_begin__lte=three_days).order_by('date_time_begin')
     
     for event in event_list:
-        if __not_tweeted_yet_or_updated_since_tweet(event):
-            tweet = __format_tweet(request, event)
+        tweeted_event_list = TweetedEvent.objects.filter(event=event).order_by('-date_time_created')
+        if __not_tweeted_yet_or_updated_since_tweet(event, tweeted_event_list):
+            tweet = __format_tweet(request, event, tweeted_event_list)
             try:
                 __tweet_event(tweet)
-                __mark_as_tweeted(event)
+                __mark_as_tweeted(event, tweet)
                 break
             except TweepError, e:
                 logging.error(e.reason)
                 if e.reason == u'Status is a duplicate.':
-                    __mark_as_tweeted(event)
+                    __mark_as_tweeted(event, 'TweepError: Status is a duplicate.')
                     break
                 else:
                     raise e
     response = HttpResponse()
     return response
 
-def __not_tweeted_yet_or_updated_since_tweet(event):
-    tweeted_event_list = TweetedEvent.objects.filter(event=event)
+def __not_tweeted_yet_or_updated_since_tweet(event, tweeted_event_list):
     if not tweeted_event_list.exists():
         return True
     else:
@@ -42,12 +42,13 @@ def __not_tweeted_yet_or_updated_since_tweet(event):
         tweed_date_time = tweeted_event.date_time_created
         change_log_items = EventChangeLog.objects.filter(event=event).filter(date_time__gte=tweed_date_time).order_by('date_time')
         if change_log_items.exists():
-            tweeted_event.delete()
             return True
     return False
 
-def __format_tweet(request, event):
-    prefix = utils.get_change_log_prefix(event)
+def __format_tweet(request, event, tweeted_event_list):
+    prefix = ''
+    if tweeted_event_list.exists():
+        prefix = utils.get_change_log_prefix(event)
     
     if event.takes_more_than_one_day():
         date_string = event.get_date_time_begin_cet().strftime("%d.%m.%Y") + "-" + event.get_date_time_end_cet().strftime("%d.%m.%Y")
@@ -91,9 +92,9 @@ def __tweet_event(tweet):
     api = tweepy.API(auth)
     api.update_status(tweet)
 
-def __mark_as_tweeted(event):
+def __mark_as_tweeted(event, tweet):
     tweeted_event = TweetedEvent()
     tweeted_event.event = event
-    tweeted_event.event_title = event.title
+    tweeted_event.tweet = tweet
     tweeted_event.save()
 

@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
+from django.views.generic.simple import direct_to_template
 from techism2.rss.feeds import UpcommingEventsRssFeed, UpcommingEventsAtomFeed
 
 admin.autodiscover()
@@ -48,6 +49,6 @@ urlpatterns = patterns('',
     (r'^cron/update_organization_tags_cache', 'techism2.cron.views.update_organization_tags_cache'),
     (r'^cron/update_event_tags_cache', 'techism2.cron.views.update_event_tags_cache'),
     (r'^cron/tweet_upcoming_events', 'techism2.cron.twitter.tweet_upcoming_events'),
-    
+    ('^keepalive/$', direct_to_template, { 'template': 'keepalive.html' }),
 
 )

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound, HttpResponse
 from techism2.models import Event, Location, StaticPage
 from techism2.events.forms import EventForm, EventCancelForm
 from techism2.events import event_service
@@ -51,6 +51,7 @@ def __render_static_page(request, name):
 def create(request, event_id=None):
     button_label = u'Event hinzuf\u00FCgen'
     locations_as_json = __get_locations_as_json()
+    locations = Location.objects.all().order_by('name')
     
     if request.method == 'POST':
         return __save_event(request, button_label, locations_as_json)
@@ -65,7 +66,8 @@ def create(request, event_id=None):
         {
             'form': form,
             'button_label': button_label,
-            'locations_as_json': locations_as_json
+            'locations_as_json': locations_as_json,
+            'locations': locations
         },
         context_instance=RequestContext(request))
 
@@ -138,6 +140,11 @@ def __cancel_event(request, event):
             'event': event
         },
         context_instance=RequestContext(request))
+        
+def locations(request):
+    if request.is_ajax():
+        return HttpResponse(__get_locations_as_json())
+    
 
 def __save_event(request, button_label, locations_as_json, old_event=None):
     form = EventForm(request.POST) 

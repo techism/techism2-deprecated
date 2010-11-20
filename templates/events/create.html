@@ -68,7 +68,16 @@
 					<div class="row"><h3>Wo</h3></div> 
 					<div class="row">
 						<label>Veranstaltungsort wählen</label>
-						{{ form.location }}
+				
+						<select name="location" id="id_location"> 
+						   <option value="" selected="selected">---------</option> 
+						  {% for location in locations %}
+						    <option value="{{location.id}}">{{location.name}}</option> 
+						  {% endfor %}
+						</select> 
+						      
+						
+						
 					</div>
 					<div class="row"><p><strong>oder</strong></p></div>
 					<div class="row">Neuen Veranstaltungsort anlegen</div><br>

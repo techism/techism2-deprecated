@@ -51,7 +51,6 @@ def __render_static_page(request, name):
 def create(request, event_id=None):
     button_label = u'Event hinzuf\u00FCgen'
     locations_as_json = __get_locations_as_json()
-    locations = Location.objects.all().order_by('name')
     
     if request.method == 'POST':
         return __save_event(request, button_label, locations_as_json)
@@ -65,9 +64,7 @@ def create(request, event_id=None):
         'events/create.html',
         {
             'form': form,
-            'button_label': button_label,
-            'locations_as_json': locations_as_json,
-            'locations': locations
+            'button_label': button_label
         },
         context_instance=RequestContext(request))
 
@@ -103,8 +100,7 @@ def edit(request, event_id):
         'events/create.html',
         {
             'form': form,
-            'button_label': button_label,
-            'locations_as_json': locations_as_json
+            'button_label': button_label
         },
         context_instance=RequestContext(request))
 
@@ -160,8 +156,7 @@ def __save_event(request, button_label, locations_as_json, old_event=None):
             {
                 'form': form, 
                 'error': form.errors,
-                'button_label': button_label,
-                'locations_as_json': locations_as_json
+                'button_label': button_label
             },
             context_instance=RequestContext(request))
 
@@ -245,12 +240,14 @@ def __get_paginator_page(request, event_list):
 
 def __get_locations_as_json():
     location_list = Location.objects.all()
-    locations = dict()
+    locations = []
     for location in location_list:
-        locations[location.id] = dict()
-        locations[location.id]['name'] = html.escape(location.name)
-        locations[location.id]['street'] = html.escape(location.street)
-        locations[location.id]['city'] = html.escape(location.city)
+        loc = dict()
+        loc['id'] = html.escape(location.id)
+        loc['name'] = html.escape(location.name)
+        loc['street'] = html.escape(location.street)
+        loc['city'] = html.escape(location.city)
+        locations.append(loc)
     locations_as_json = json.dumps(locations)
     return locations_as_json
 

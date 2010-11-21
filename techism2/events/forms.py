@@ -1,6 +1,7 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 from django import forms
+from techism2 import fields
 from techism2.models import Location
 
 
@@ -10,7 +11,7 @@ class EventForm(forms.Form):
     date_time_end = forms.SplitDateTimeField(label=u'Ende (falls festgelegt)', required=False, input_date_formats=['%d.%m.%Y'], widget=forms.SplitDateTimeWidget(date_format='%d.%m.%Y', time_format='%H:%M'))
     url = forms.URLField()
     description = forms.CharField(label= u'Beschreibung', widget=forms.Textarea, required=False)
-    
+    location = forms.ModelChoiceField (Location.objects.all().order_by('name'), required=False)
     tags = fields.CommaSeparatedListFormField(label= u'Tags', required=False)
     
     location_name = forms.CharField(label= u'Name',max_length=200, required=False)

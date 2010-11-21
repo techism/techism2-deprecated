@@ -1,8 +1,10 @@
 var geocoder;
 var map;
+var locations = new Object();
 google.maps.event.addDomListener(window, 'load', function() {
 	initializeMunichCityCenter();
 	update_location();
+  initialize_location();
 });
 
 $(function() {
@@ -11,6 +13,17 @@ $(function() {
 	$("#id_date_time_end_0").datepicker( $.datepicker.regional[ "de" ]);
 	$("#id_location").change(update_location);
 });
+
+var initialize_location = function() {
+    $.getJSON("/events/locations",{id: $(this).val(), ajax: 'true'}, function(jsonLocation){
+    /*var options = '<option value="">- - - - - - - - - -</option>';*/
+    for (var i = 0; i < jsonLocation.length; i++) {
+      /*options += '<option value="' + jsonLocation[i].id + '">' + jsonLocation[i].name + '</option>';*/
+      locations[jsonLocation[i].id] = jsonLocation[i];
+    }
+    $("#id_location").html(options);
+  });
+}
 
 var update_location = function() {
 	var id = $("#id_location").val();

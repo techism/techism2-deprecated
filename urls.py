@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     (r'^events/create/$', 'techism2.events.views.create'),
     (r'^events/archive/$', 'techism2.events.views.archive'),
     (r'^events/tags/(?P<tag_name>.+)/$', 'techism2.events.views.tag'),
+    (r'^events/locations/$', 'techism2.events.views.locations'),
     
     # orgs
     (r'^orgs/$', 'techism2.orgs.views.index'),

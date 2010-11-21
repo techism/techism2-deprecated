@@ -138,8 +138,7 @@ def __cancel_event(request, event):
         context_instance=RequestContext(request))
         
 def locations(request):
-    if request.is_ajax():
-        return HttpResponse(__get_locations_as_json())
+    return HttpResponse(__get_locations_as_json())
     
 
 def __save_event(request, button_label, locations_as_json, old_event=None):

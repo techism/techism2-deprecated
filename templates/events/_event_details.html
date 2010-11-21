@@ -33,8 +33,9 @@
 	    
 		<section class="what">
 			<h3>Was</h3>
-			<p class="description">	
-				{{ event.description|linebreaks }} <a id="url" target="_blank" href="{{ event.url }}">Website</a>
+				{{ event.description|linebreaks }} 
+			<p class="description">  	
+				<a target="_blank" href="{{ event.url }}">Website</a>
 			</p>
 			<p class="tags">
 				{% for tag in event.tags %}
@@ -56,15 +57,11 @@
 			</p>
 		</section>
 		<section class="where" id="event{{ event.id }}">
+		  {% if event.location.name and event.location.street and event.location.city %}
 			<h3>Wo</h3>
-			{% if event.location.name and event.location.street and event.location.city %}
 				<p>	
 					{{event.location.name}}, {{event.location.street}}, {{event.location.city}} <br><br>
 					<a href="http://maps.google.de/maps?q={{event.location.street|urlencode}},{{ event.location.city|urlencode}},Bayern&z=17">Location in Google Maps anzeigen</a>
-				</p>
-			{% else %}
-				<p>
-					ist uns leider nicht bekannt...	
 				</p>
 			{% endif %}
 		</section>

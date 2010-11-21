@@ -180,7 +180,7 @@ h3 {
 #tagcloud .selected {
   border: 1px solid #00ff00;
 }
-#tags a {
+.tags a {
   background: #000000;
   color: #ffffff;
   padding: 5px;
@@ -190,10 +190,10 @@ h3 {
   text-decoration: none;
   line-height: 40px;
 }
-#tags a:hover {
+.tags a:hover {
   border: 1px solid #00ff00;
 }
-#tags .selected {
+.tags .selected {
   border: 1px solid #00ff00;
 }
 #top li a img {

@@ -3,7 +3,7 @@
 	<header> 
 		<section class="header-content"> 
 			<div class="title"> 
-				<h2>{% if event.canceled %}[Abgesagt] {% endif %}<a id="{{ event.id }} event"{% if event.canceled %} class="canceled"{% endif %} href="#event">{{ event.title }}</a></h2>
+				<h2>{% if event.canceled %}[Abgesagt] {% endif %}<a id="{{ event.id }}_event"{% if event.canceled %} class="canceled"{% endif %} href="#event">{{ event.title }}</a></h2>
 			</div> 
 			{% if event.user == user or user.is_superuser %}
 				<div class="edit"> 
@@ -36,7 +36,7 @@
 			<p class="description">	
 				{{ event.description|linebreaks }} <a id="url" target="_blank" href="{{ event.url }}">Website</a>
 			</p>
-			<p id="tags">
+			<p class="tags">
 				{% for tag in event.tags %}
 					<a {% ifequal tag_name tag %}class="selected"{% endifequal %} href="/events/tags/{{ tag }}/">{{ tag }}</a>
 				{% endfor %}

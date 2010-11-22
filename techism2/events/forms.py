@@ -48,9 +48,9 @@ class EventForm(forms.Form):
         cleaned_data = self.cleaned_data
         date_time_begin = cleaned_data.get("date_time_begin");
         date_time_end = cleaned_data.get("date_time_end")
-        if (date_time_end!=None) and (date_time_end < date_time_begin):
-                self._errors["date_time_end"] = self.error_class([u'Das Ende-Datum muss nach dem Beginn-Datum liegen.'])
-                del cleaned_data["date_time_end"]
+        if (date_time_end!=None) and (date_time_begin!=None) and (date_time_end < date_time_begin):
+            self._errors["date_time_end"] = self.error_class([u'Das Ende-Datum muss nach dem Beginn-Datum liegen.'])
+            del cleaned_data["date_time_end"]
 
 class EventCancelForm(forms.Form):
     pass

@@ -5,6 +5,7 @@ from django.utils.feedgenerator import Atom1Feed
 from django.utils import html
 from techism2.rss import utils
 from techism2.events import event_service
+from datetime import datetime, timedelta
 
 
 class UpcommingEventsRssFeed(Feed):
@@ -13,7 +14,10 @@ class UpcommingEventsRssFeed(Feed):
     description = "Techism - Events, Projekte, Usergroups in München"
 
     def items(self):
-        return event_service.get_event_query_set().order_by('date_time_begin')
+        today = datetime.utcnow() + timedelta(days=0)
+        seven_days = datetime.utcnow() + timedelta(days=7)
+        event_list = event_service.get_event_query_set().filter(date_time_begin__gte=today).filter(date_time_begin__lte=seven_days).order_by('date_time_begin')
+        return event_list
 
     def item_title(self, item):
         prefix = utils.get_change_log_prefix(item)

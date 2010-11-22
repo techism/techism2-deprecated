@@ -29,3 +29,11 @@ def localize_to_utc (datetime):
     else:
         utc_datetime = datetime.astimezone(utc)
         return utc_datetime
+
+def slugify(value):
+    import re
+    import unicodedata
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
+    value = unicode(re.sub('[^\w\s-]', '', value).strip().lower())
+    value = re.sub('[-\s]+', '-', value)
+    return value

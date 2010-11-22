@@ -1,5 +1,4 @@
 from django.http import HttpResponse
-from django.core.urlresolvers import reverse
 from django.utils import simplejson as json
 from techism2 import service
 from techism2.events import event_service
@@ -61,7 +60,7 @@ def __format_tweet(event, prefix):
         date_string = event.get_date_time_begin_cet().strftime("%d.%m.%Y %H:%M")
     
     base_url = service.get_default_url()
-    relative_url = reverse('event-show', args=[event.id])
+    relative_url = event.get_absolute_url()
     long_url = base_url + relative_url
     short_url = __shorten_url(long_url)
     

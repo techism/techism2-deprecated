@@ -105,11 +105,16 @@ def edit(request, event_id):
         context_instance=RequestContext(request))
 
 
-def show(request, event_id):
+def details(request, event_id):
+    # the event_id may be the slugified, e.g. 'munichjs-meetup-286002'
+    splitted_event_id = event_id.rsplit('-', 1)
+    if splitted_event_id.count > 1:
+        event_id = splitted_event_id[1]
+    
     tags = event_service.get_tags()
     event = Event.objects.get(id=event_id)
     return render_to_response(
-        'events/show.html',
+        'events/details.html',
         {
             'event': event,
             'tags': tags
@@ -125,7 +130,7 @@ def __cancel_event(request, event):
     if form.is_valid():
         event.canceled = True;
         event.save()
-        url = reverse('event-show', args=[event.id])
+        url = event.get_absolute_url()
         return HttpResponseRedirect(url)
     else:
         return render_to_response(
@@ -147,7 +152,7 @@ def __save_event(request, button_label, locations_as_json, old_event=None):
         event= __create_or_update_event_with_location(form, request.user, old_event)
         if not event.published:
             service.send_event_review_mail(event)
-        url = reverse('event-show', args=[event.id])
+        url = event.get_absolute_url()
         return HttpResponseRedirect(url)
     else:
         return render_to_response(

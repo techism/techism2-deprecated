@@ -1,7 +1,6 @@
 #!/usr/local/bin/python
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
-from django.core.urlresolvers import reverse
 from techism2.events import event_service
 from datetime import datetime, timedelta
 import icalendar
@@ -48,7 +47,7 @@ def ical(request):
         else:
             event['status'] = icalendar.vText(u'CONFIRMED')
         
-        relative_url = reverse('event-show', args=[e.id])
+        relative_url = e.get_absolute_url()
         absolute_url = request.build_absolute_uri(relative_url)
         event['url'] = icalendar.vUri(absolute_url)
         

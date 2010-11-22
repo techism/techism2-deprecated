@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models import signals
 from django.db import models
+from django.utils.encoding import iri_to_uri
 from datetime import datetime, timedelta
 import time
 from techism2 import fields, utils
@@ -46,6 +47,11 @@ class Event(models.Model):
     
     def __unicode__(self):
         return self.title
+    
+    @models.permalink
+    def get_absolute_url(self):
+        value = utils.slugify(self.title)
+        return ("techism2.events.views.details", [iri_to_uri("%s-%s" % (value, self.id))])
     
     def get_date_time_created_utc(self):
         "Gets the 'Created' date/time in UTC."

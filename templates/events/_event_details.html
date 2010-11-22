@@ -27,7 +27,7 @@
 	<section class="detail{% if event.canceled %} canceled{% endif %}">
         <section>
             <div>
-                <a href="/events/{{ event.id }}/">Link zu dieser Detailseite</a>
+                <a href="{{ event.get_absolute_url }}">Link zu dieser Detailseite</a>
             </div>
         </section>
 	    

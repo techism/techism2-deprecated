@@ -37,7 +37,7 @@ class UpcommingEventsRssFeed(Feed):
         return description
     
     def item_link(self, item):
-        return "/events/" + str(item.id)
+        return item.get_absolute_url()
     
     def author_name(self):
         return "Techism"

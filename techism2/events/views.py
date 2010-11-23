@@ -96,7 +96,7 @@ def edit(request, event_id):
 def details(request, event_id):
     # the event_id may be the slugified, e.g. 'munichjs-meetup-286002'
     splitted_event_id = event_id.rsplit('-', 1)
-    if splitted_event_id.count > 1:
+    if len(splitted_event_id) > 1:
         event_id = splitted_event_id[1]
     
     tags = event_service.get_tags()

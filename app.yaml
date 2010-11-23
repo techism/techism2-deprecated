@@ -1,13 +1,14 @@
 api_version: 1
 application: techism2-devel
-default_expiration: 2d
+default_expiration: 1d
 handlers:
 - {login: admin, script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py, url: /remote_api}
 - {login: admin, script: djangoappengine/deferred/handler.py, url: /_ah/queue/deferred}
-- {static_dir: django/contrib/admin/media/, url: /media/admin}
+- {static_dir: django/contrib/admin/media/, url: /media/admin, expiration: '1d'}
 - {static_files: static/favicon.ico, upload: static/favicon.ico, url: /favicon.ico}
 - {static_files: static/robots.txt, upload: static/robots.txt, url: /robots.txt}
-- {static_dir: static/, url: /static}
+- {static_files: static/loader.gif, upload: static/loader.gif, url: /loader.gif}
+- {static_dir: _generated_media/, url: /media, expiration: '365d'}
 - {script: djangoappengine/main/main.py, url: /.*}
 runtime: python
 version: 13-devel

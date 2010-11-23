@@ -6,3 +6,5 @@
 .idea/
 static/.DS_Store
 static/images/.DS_Store
+_generated_media/
+_generated_media_names.py

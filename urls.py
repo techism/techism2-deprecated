@@ -23,8 +23,8 @@ urlpatterns = patterns('',
     (r'^orgs/tags/(?P<tag_name>.+)/$', 'techism2.orgs.views.tag'),
     
     # static pages
-    (r'^impressum/$', 'techism2.events.views.static_impressum'),
-    (r'^about/$', 'techism2.events.views.static_about'),
+    (r'^impressum/$', 'techism2.views.static_impressum'),
+    (r'^about/$', 'techism2.views.static_about'),
     
     # iCal
     (r'^feed.ics$', 'techism2.ical.views.ical'),
@@ -40,7 +40,7 @@ urlpatterns = patterns('',
     
     # login/logout
     (r'^accounts/', include('django_openid_auth.urls')),
-    (r'^accounts/logout/$', 'techism2.events.views.logout'),
+    (r'^accounts/logout/$', 'techism2.views.logout'),
     url(r'^accounts/google_login/$', 'gaeauth.views.login', name='google_login'),
     url(r'^accounts/google_logout/$', 'gaeauth.views.logout', name='google_logout'),
     url(r'^accounts/google_authenticate/$', 'gaeauth.views.authenticate', name='google_authenticate'),

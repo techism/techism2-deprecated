@@ -12,12 +12,14 @@ SECRET_KEY = '=r-$b*8hglm+858&9t043hlm6-&6-3d3vfc4((7yd0dbrakhvi'
 
 INSTALLED_APPS = (
     'djangotoolbox',
+    'mediagenerator',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django_openid_auth',
     'techism2.events',
+    'techism2.orgs',
     'techism2'
 )
 
@@ -33,6 +35,35 @@ USE_L10N = True
 ADMIN_MEDIA_PREFIX = '/media/admin/'
 MEDIA_ROOT = os.path.join(os.path.dirname(__file__), 'media')
 TEMPLATE_DIRS = (os.path.join(os.path.dirname(__file__), 'templates'),)
+
+MEDIA_DEV_MODE = DEBUG
+DEV_MEDIA_URL = '/devmedia/'
+PRODUCTION_MEDIA_URL = '/media/'
+GLOBAL_MEDIA_DIRS = (os.path.join(os.path.dirname(__file__), 'media'),)
+
+MEDIA_BUNDLES = (
+    ('base.css',
+        'css/style.css',
+        'css/jquery/jquery-ui-1.8.5.custom.css',
+    ),
+    ('base.js',
+        'js/jquery/jquery-1.4.2.min.js',
+        'js/jquery/jquery-ui-1.8.6.custom.min.js',
+        'js/jquery/jquery.infinitescroll.min.js',
+        'js/modernizr-1.6.min.js',
+        'js/googlemaps.js',
+    ),
+    ('events-index.js',
+        'js/events/index.js',
+    ),
+    ('events-details.js',
+        'js/events/details.js',
+    ),
+    ('events-create.js',
+        'js/jquery/jquery.ui.datepicker-de.js',
+        'js/events/create.js',
+    ),
+)
 
 ROOT_URLCONF = 'urls'
 
@@ -50,6 +81,8 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
 
 MIDDLEWARE_CLASSES = (
+    # Media middleware has to come first
+    'mediagenerator.middleware.MediaMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

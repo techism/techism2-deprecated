@@ -1,18 +1,15 @@
+{% load media %}
 <!DOCTYPE html>
 <html lang="de">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=480, height=640, user-scalable=yes" />
-	<link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png"/>
-	<link rel="icon" href="/static/images/favicon.ico" type="image/ico">
+	<link rel="apple-touch-icon" href="{% media_url 'images/apple-touch-icon.png' %}"/>
+	<link rel="icon" href="{% media_url 'images/favicon.ico' %}" type="image/ico">
 	<link rel="alternate" type="application/atom+xml" title="Techism - Events, Projekte, Usergroups in München" href="/feeds/atom/upcomming_events"/>
 	<link rel="alternate" type="application/rss+xml"  title="Techism - Events, Projekte, Usergroups in München (für ältere RSS-Reader)" href="/feeds/rss/upcomming_events"/>
-	<link rel="stylesheet" type="text/css" href="/static/css/style.css">
-	<link type="text/css" href="/static/jquery/css/custom-theme/jquery-ui-1.8.5.custom.css" media="screen" rel="stylesheet"/>
-	<script type="text/javascript" src="/static/jquery/js/jquery-1.4.2.min.js"></script> 
-  <script type="text/javascript" src="/static/jquery/js/jquery-ui-1.8.6.custom.min.js"></script>
-  <script type="text/javascript" src="/static/jquery/js/jquery.infinitescroll.min.js" charset="utf-8"></script>
-  <script src="/static/js/modernizr-1.6.min.js"></script>
+	{% include_media 'base.css' %}
+	{% include_media 'base.js' %}
 	{% block head %}{% endblock %}
 </head>
 
@@ -21,7 +18,7 @@
 		<nav>
 			<div>
 				<ul>
-					<li><a href="/"><img src="/static/images/techism_logo_05.png" alt="Techism"></a></li>
+					<li><a href="/"><img width="105", height="33" src="{% media_url 'images/techism_logo_05.png' %}" alt="Techism"></a></li>
 					<li{% if '/events/' in request.path or '/' == request.path %} id="active"{% endif %}><a href="/events/">Events</a></li>	
 					<li id="add"><a href="/events/create/">+</a></li>
 					<li{% if '/orgs/' in request.path %} id="active"{% endif %}><a href="/orgs/">Orgs</a></li>	

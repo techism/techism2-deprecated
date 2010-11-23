@@ -3,13 +3,11 @@
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseNotFound, HttpResponse
-from techism2.models import Event, Location, StaticPage
+from techism2.models import Event, Location
 from techism2.events.forms import EventForm, EventCancelForm
 from techism2.events import event_service
 from techism2 import service
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
-from django.core.urlresolvers import reverse
-from django.contrib.auth import logout as django_logout
 from django.utils import simplejson as json
 from django.utils import html
 
@@ -37,16 +35,6 @@ def tag(request, tag_name):
     if page == -1:
         return HttpResponseNotFound()
     return render_to_response('events/index.html', {'event_list': page, 'tags': tags, 'tag_name': tag_name}, context_instance=RequestContext(request))
-
-def static_impressum(request):
-    return __render_static_page(request, 'static.impressum')
-
-def static_about(request):
-    return __render_static_page(request, 'static.about')
-
-def __render_static_page(request, name):
-    page, created = StaticPage.objects.get_or_create(name=name, defaults={'content': u'<section id="content">Bitte Inhalt einf\u00FCgen.</section>'})
-    return render_to_response('events/static.html', {'content': page.content}, context_instance=RequestContext(request))
 
 def create(request, event_id=None):
     button_label = u'Event hinzuf\u00FCgen'
@@ -120,10 +108,6 @@ def details(request, event_id):
             'tags': tags
         },
         context_instance=RequestContext(request))
-
-def logout(request):
-    django_logout(request)
-    return HttpResponseRedirect('/')
 
 def __cancel_event(request, event):
     form = EventCancelForm(request.POST) 

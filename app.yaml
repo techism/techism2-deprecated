@@ -1,5 +1,5 @@
 api_version: 1
-application: techism2-devel
+application: techism2
 default_expiration: 1d
 handlers:
 - {login: admin, script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py, url: /remote_api}
@@ -8,8 +8,9 @@ handlers:
 - {static_files: static/favicon.ico, upload: static/favicon.ico, url: /favicon.ico}
 - {static_files: static/robots.txt, upload: static/robots.txt, url: /robots.txt}
 - {static_files: static/loader.gif, upload: static/loader.gif, url: /loader.gif}
-- {static_files: static/google6aef877ff1ed9813.html, upload: static/google6aef877ff1ed9813.html, url: /google6aef877ff1ed9813.html}
+- {static_files: static/google6aef877ff1ed9813.html, upload: static/google6aef877ff1ed9813.html,
+  url: /google6aef877ff1ed9813.html}
 - {expiration: 365d, static_dir: _generated_media/, url: /media}
 - {script: djangoappengine/main/main.py, url: /.*}
 runtime: python
-version: 15-devel
+version: '15'

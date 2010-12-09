@@ -17,6 +17,7 @@ INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sitemaps',
     'django_openid_auth',
     'techism2.events',
     'techism2.orgs',

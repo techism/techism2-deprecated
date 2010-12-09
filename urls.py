@@ -2,8 +2,20 @@ from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
 from django.views.generic.simple import direct_to_template
 from techism2.rss.feeds import UpcommingEventsRssFeed, UpcommingEventsAtomFeed
+from techism2.sitemaps import TechismSitemap
+from techism2.events.sitemaps import EventIndexSitemap, EventDetailsSitemap, EventTagsSitemap
+from techism2.orgs.sitemaps import OrgIndexSitemap, OrgTagsSitemap
 
 admin.autodiscover()
+
+sitemaps = {
+    'techism': TechismSitemap,
+    'event_index': EventIndexSitemap,
+    'event_details': EventDetailsSitemap,
+    'event_tags': EventTagsSitemap,
+    'org_index': OrgIndexSitemap,
+    'org_tags': OrgTagsSitemap,
+}
 
 urlpatterns = patterns('',
     # events
@@ -25,6 +37,9 @@ urlpatterns = patterns('',
     # static pages
     (r'^impressum/$', 'techism2.views.static_impressum'),
     (r'^about/$', 'techism2.views.static_about'),
+    
+    # sitemap.xml
+    (r'^sitemap\.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     
     # iCal
     (r'^feed.ics$', 'techism2.ical.views.ical'),

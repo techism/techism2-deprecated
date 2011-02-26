@@ -1,8 +1,11 @@
+var markersArray = [];
+
 function displayLocation(street, city){
   var where = $("#map_location");
   var location = street +","+city+","+ "Bayern";
   if (where[0].nodeName == "DIV"){
     if (street.length > 0 && city.length > 0){
+        deleteOverlays();
         geocodeAndSetMarker (map, location, true);
     }
   } else {
@@ -114,6 +117,7 @@ function geocodeAndSetMarker (myMap, location, isDraggable){
               position: results[0].geometry.location,
               draggable: isDraggable
           });
+          markersArray.push(marker);
         } 
       });
 }
@@ -124,5 +128,15 @@ function getDynamicMapHeight(width){
 
 function getStaticMapHeight(width){
   return Math.round(width / 2)
+}
+
+// Deletes all markers in the array by removing references to them
+function deleteOverlays() {
+  if (markersArray) {
+    for (i in markersArray) {
+      markersArray[i].setMap(null);
+    }
+    markersArray.length = 0;
+  }
 }
 

@@ -43,6 +43,7 @@ urlpatterns = patterns('',
     
     # iCal
     (r'^feed.ics$', 'techism2.ical.views.ical'),
+    #(r'^ical/(?P<event_id>.+).ics/$', 'techism2.ical.views.ical'),
     
     # Atom
     (r'^feeds/atom/upcomming_events$', UpcommingEventsAtomFeed()),

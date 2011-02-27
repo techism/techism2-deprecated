@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 class UpcommingEventsRssFeed(Feed):
     title = "Techism"
     link = "/events/"
-    description = "Techism - Events, Projekte, Usergroups in München"
+    description = "Techism - Events, Projekte, User Groups in München"
 
     def items(self):
         today = datetime.utcnow() + timedelta(days=0)

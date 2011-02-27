@@ -1,4 +1,5 @@
 {% load web_tags %}
+{% load media %}
 <article class="event">
 	<header> 
 		<section class="header-content"> 
@@ -35,7 +36,10 @@
 			<h3>Was</h3>
 				{{ event.description|linebreaks }} 
 			<p class="description">  	
-				<a target="_blank" href="{{ event.url }}">Website</a>
+				<img src="{% media_url 'images/world_link.png' %}" > <a target="_blank" href="{{ event.url }}">Webseite des Veranstalters</a>
+			</p>
+        	<p class="ical">
+				<img src="{% media_url 'images/date.png' %}" ><a target="_blank" href="/ical/{{ event.id }}.ics">iCal Export</a>
 			</p>
 			<p class="tags">
 				{% for tag in event.tags %}

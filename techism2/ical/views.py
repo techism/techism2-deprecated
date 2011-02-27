@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from techism2.events import event_service
+from techism2.models import Event
 from datetime import datetime, timedelta
 import icalendar
 import time
@@ -10,18 +11,33 @@ import time
 def ical(request):
     ninety_days = datetime.utcnow() + timedelta(days=90)
     event_list = event_service.get_event_query_set().filter(date_time_begin__lte=ninety_days).order_by('date_time_begin')
-    
+    cal = create_calendar_with_metadata()
+    for e in event_list:
+        event = create_ical_entry(e, request)
+        cal.add_component(event)
+    response = create_httpresponse(cal.as_string())
+    return response
+
+
+def ical_single_event (request, event_id):
+    e = Event.objects.get(id=event_id)
+    cal = create_calendar_with_metadata()
+    event = create_ical_entry(e, request)
+    cal.add_component(event)
+    response = create_httpresponse(cal.as_string())
+    return response
+
+
+def create_calendar_with_metadata ():
     cal = icalendar.Calendar()
     cal['prodid'] = icalendar.vText(u'-//Techism//Techism//DE')
     cal['version'] = icalendar.vText(u'2.0')
     cal['x-wr-calname'] = icalendar.vText(u'Techism')
     cal['x-wr-caldesc'] = icalendar.vText(u'Techism - Events, Projekte, User Groups in München')
-    
-    for e in event_list:
-        event = create_event(e, request)
-        cal.add_component(event)
-    
-    response = HttpResponse(cal.as_string())
+    return cal
+
+def create_httpresponse (content):
+    response = HttpResponse(content)
     response['Content-Type'] = 'text/calendar; charset=UTF-8'
     response['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
     response['Pragma'] = 'no-cache'
@@ -29,7 +45,7 @@ def ical(request):
     return response
 
 
-def create_event (e, request):
+def create_ical_entry (e, request):
         event = icalendar.Event()
 
         # TODO should we generate an UUID when creating the event?

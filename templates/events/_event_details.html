@@ -39,7 +39,8 @@
 				<img src="{% media_url 'images/world_link.png' %}" > <a target="_blank" href="{{ event.url }}">Webseite des Veranstalters</a>
 			</p>
         	<p class="ical">
-				<img src="{% media_url 'images/date.png' %}" ><a href="/ical/{{ event.id }}.ics">iCal Export</a>
+				<img src="{% media_url 'images/date.png' %}" > <a href="/ical/{{ event.id }}.ics">iCal Export</a><br/>
+                <img src="{% media_url 'images/date.png' %}" > <a href="webcal://{{ request.get_host }}/ical/{{ event.id }}.ics">WebCal</a>
 			</p>
 			<p class="tags">
 				{% for tag in event.tags %}

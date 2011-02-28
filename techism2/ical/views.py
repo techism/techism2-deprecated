@@ -77,6 +77,7 @@ def create_ical_entry (e, request):
 
         relative_url = e.get_absolute_url()
         absolute_url = request.build_absolute_uri(relative_url)
+        
         event['url'] = icalendar.vUri(absolute_url)
 
         if e.title:

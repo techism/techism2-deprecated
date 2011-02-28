@@ -18,7 +18,7 @@
 						<p class="description">
 							<a target="_blank" href="{{ organization.url }}">{{ organization.url }}</a>
 						</p>
-						<p id="tags">
+						<p class="tags">
 							{% for tag in organization.tags %}
 								<a {% ifequal tag_name tag %}class="selected"{% endifequal %} href="/orgs/tags/{{ tag }}/">{{ tag }}</a>
 							{% endfor %}

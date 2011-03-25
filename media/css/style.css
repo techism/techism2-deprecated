@@ -207,6 +207,7 @@ footer ul li { margin-right: 10px; }
 }
 .vevent:first-child { border-top: none; }
 .vevent:last-child { border-bottom: none; }
+.dtstart, .dtend { display: none; }
 .box {
   display: box;
   border-radius: 5px;

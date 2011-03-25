@@ -4,7 +4,7 @@
 	<header> 
 		<section class="header-content"> 
 			<div class="title"> 
-				<h2>{% if event.canceled %}[Abgesagt] {% endif %}<a id="{{ event.id }}_event"{% if event.canceled %} class="canceled"{% endif %} href="#event">{{ event.title }}</a></h2>
+				<h2 class="summary">{% if event.canceled %}[Abgesagt] {% endif %}<a id="{{ event.id }}_event"{% if event.canceled %} class="canceled"{% endif %} href="#event">{{ event.title }}</a></h2>
 			</div> 
 			{% if event.user == user or user.is_superuser %}
 				<div class="edit"> 
@@ -27,17 +27,17 @@
 	</header>
 	<section class="detail{% if event.canceled %} canceled{% endif %}">
         <section>
-            <div>
+            <div class="url">
                 <a href="{{ event.get_absolute_url }}">Link zu dieser Detailseite</a>
             </div>
         </section>
 	    
 		<section class="what">
 			<h3>Was</h3>
-            <div class="summary">
+            <div class="description">
 				{{ event.description|linebreaks }}
             </div>
-			<p class="url">
+			<p>
 				<img src="{% media_url 'images/world_link.png' %}" > <a target="_blank" href="{{ event.url }}">Webseite des Veranstalters</a>
 			</p>
         	<p class="ical">
@@ -53,17 +53,16 @@
 		<section class="when">
 			<h3>Wann</h3>
 			<p class="date">
-                <div class="dtstart">
+                <div class="dtstart">{{ event.get_date_time_begin_cet|date:"c" }}</div>
 				{{ event.get_date_time_begin_cet|display_date }}
-                </div>
+
 				{% if event.get_date_time_end_cet %} bis
-                  <div class="dtend">
+                  <div class="dtend"> {{ event.get_date_time_end_cet|date:"c" }}</div>
 				  {% if event.getNumberOfDays > 1 %}
 					   {{ event.get_date_time_end_cet|display_date }}
 					{% else %}
 					   {{ event.get_date_time_end_cet|time:"H:i" }}
 					{% endif %}
-                    </div>
 				{% endif %}
 			</p>
 		</section>

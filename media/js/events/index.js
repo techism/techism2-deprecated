@@ -5,7 +5,7 @@ $(document).ready(function(){
   /*$("#admin").hide();*/
 
   // clicks for touch interface
-  $('article.event > header')
+  $('article.vevent > header')
     .live('click', function() {
       $(this)
         .parent()
@@ -17,7 +17,7 @@ $(document).ready(function(){
   $('#content').infinitescroll({
     navSelector  : ".next",  // selector for the paged navigation (it will be hidden)
     nextSelector : ".next",  // selector for the NEXT link (to page 2)
-    itemSelector : ".event", // selector for all items you'll retrieve
+    itemSelector : ".vevent", // selector for all items you'll retrieve
     errorCallback: function(){ $('#infscr-loading').remove() }
     },function(arrayOfNewElems){
       // hide all event details

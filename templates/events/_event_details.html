@@ -1,6 +1,6 @@
 {% load web_tags %}
 {% load media %}
-<article class="event">
+<article class="vevent">
 	<header> 
 		<section class="header-content"> 
 			<div class="title"> 
@@ -34,8 +34,10 @@
 	    
 		<section class="what">
 			<h3>Was</h3>
-				{{ event.description|linebreaks }} 
-			<p class="description">  	
+            <div class="summary">
+				{{ event.description|linebreaks }}
+            </div>
+			<p class="url">
 				<img src="{% media_url 'images/world_link.png' %}" > <a target="_blank" href="{{ event.url }}">Webseite des Veranstalters</a>
 			</p>
         	<p class="ical">
@@ -51,13 +53,17 @@
 		<section class="when">
 			<h3>Wann</h3>
 			<p class="date">
+                <div class="dtstart">
 				{{ event.get_date_time_begin_cet|display_date }}
+                </div>
 				{% if event.get_date_time_end_cet %} bis
+                  <div class="dtend">
 				  {% if event.getNumberOfDays > 1 %}
 					   {{ event.get_date_time_end_cet|display_date }}
 					{% else %}
 					   {{ event.get_date_time_end_cet|time:"H:i" }}
 					{% endif %}
+                    </div>
 				{% endif %}
 			</p>
 		</section>
@@ -65,7 +71,7 @@
 		  {% if event.location.name and event.location.street and event.location.city %}
 			<h3>Wo</h3>
 				<p>	
-					{{event.location.name}}, {{event.location.street}}, {{event.location.city}} <br><br>
+					<div class="location">{{event.location.name}}, {{event.location.street}}, {{event.location.city}}</div> <br><br>
 					<a href="http://maps.google.de/maps?q={{event.location.street|urlencode}},{{ event.location.city|urlencode}},Bayern&z=17">Location in Google Maps anzeigen</a>
 				</p>
 			{% endif %}

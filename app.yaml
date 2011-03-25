@@ -13,4 +13,4 @@ handlers:
 - {expiration: 365d, static_dir: _generated_media/, url: /media}
 - {script: djangoappengine/main/main.py, url: /.*}
 runtime: python
-version: 17-devel
+version: 18-devel

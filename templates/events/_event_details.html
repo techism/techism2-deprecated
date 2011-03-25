@@ -27,9 +27,7 @@
 	</header>
 	<section class="detail{% if event.canceled %} canceled{% endif %}">
         <section>
-            <div class="url">
-                <a href="{{ event.get_absolute_url }}">Link zu dieser Detailseite</a>
-            </div>
+                <a class="url" href="http://{{ request.get_host }}{{ event.get_absolute_url }}">Link zu dieser Detailseite</a>
         </section>
 	    
 		<section class="what">

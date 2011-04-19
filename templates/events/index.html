@@ -20,7 +20,7 @@
             {% include "events/_event_details.html" %}
         {% endfor %}   
         {% if event_list.has_next or event_list.has_previous %}
-            <article class="event" id="more">
+            <article class="vevent" id="more">
                 <header>
                     <h2>
                         {% if event_list.has_previous %}

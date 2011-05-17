@@ -134,8 +134,8 @@ def __save_event(request, button_label, locations_as_json, old_event=None):
     form = EventForm(request.POST) 
     if form.is_valid(): 
         event= __create_or_update_event_with_location(form, request.user, old_event)
-        if not event.published:
-            service.send_event_review_mail(event)
+        #if not event.published:
+            #service.send_event_review_mail(event)
         url = event.get_absolute_url()
         return HttpResponseRedirect(url)
     else:

@@ -98,12 +98,17 @@ jQuery.parseQuery = function(qs,options) {
 
 function getOptionsMunichCityCenter (){
     var latlng = new google.maps.LatLng(48.13788,11.575953);
+    var layer = "toner";
     var myOptions = {
     zoom: 15,
     center: latlng,
-    mapTypeId: google.maps.MapTypeId.ROADMAP,
-    scrollwheel: false
+    mapTypeId: layer,
+    scrollwheel: false,
+    mapTypeControlOptions: {
+        mapTypeIds: [layer]
+    }
   };
+  map.mapTypes.set(layer, new google.maps.StamenMapType(layer));
   return myOptions;
 }
 
